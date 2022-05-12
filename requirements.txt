@@ -1,0 +1,6 @@
+Python-dev
+
+# apt install python3-dev
+
+SetupTools
+$ wget http://peak.telecommunity.com/dist/ez_setup.py
