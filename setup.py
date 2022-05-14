@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # setup.py
 # setup program for clips module
 
@@ -26,8 +26,8 @@ A Python module to interface the CLIPS expert system shell library."""
 
 
 __revision__ = "$Id: setup.py 342 2008-02-22 01:17:23Z Franz $"
-print "Module 'clips': Python to CLIPS interface"
-print "Setup revision: %s" % __revision__
+print("Module 'clips': Python to CLIPS interface")
+print(f"Setup revision: {__revision__}")
 
 
 # the following values generate the version number and some of them
@@ -38,16 +38,12 @@ PYCLIPS_MAJOR = 1
 PYCLIPS_MINOR = 0
 PYCLIPS_PATCHLEVEL = 7
 PYCLIPS_INCREMENTAL = 348
-PYCLIPS_VERSION = "%s.%s.%s.%s" % (
-    PYCLIPS_MAJOR,
-    PYCLIPS_MINOR,
-    PYCLIPS_PATCHLEVEL,
-    PYCLIPS_INCREMENTAL)
+PYCLIPS_VERSION = f"{PYCLIPS_MAJOR}.{PYCLIPS_MINOR}.{PYCLIPS_PATCHLEVEL}.{PYCLIPS_INCREMENTAL}"
 
 
 from glob import glob
 import os, sys, re, tempfile
-
+import subprocess
 
 # remove unwanted patch sets from this list (not recommended)
 APPLY_PATCHSETS = [
@@ -95,13 +91,13 @@ setup_h_templ = """\
 #define _H_setup
 
 #define GENERIC 0
-#define UNIX_V  %s
+#define UNIX_V  {}
 #define UNIX_7  0
 #define MAC_MCW 0
 #define IBM_MCW 0
-#define IBM_MSC %s
+#define IBM_MSC {}
 #define IBM_TBC 0
-#define IBM_GCC %s
+#define IBM_GCC {}
 
 #define IBM_ZTC 0
 #define IBM_ICB 0
@@ -347,7 +343,7 @@ from _clips_wrap import Nil, Integer, Float, String, Symbol, InstanceName, \\
 class Environment(object):
     """class representing an environment: implements all global classes"""
 
-%(MEMBER_CLASSES)s
+{MEMBER_CLASSES}
 
     # constructor possibly sets the "borrowed" flag, to state that this
     #  is a Python class around an existing object: in this case the
@@ -364,7 +360,7 @@ class Environment(object):
                 self.__borrowed = True
             else:
                 raise TypeError("invalid argument for constructor")
-%(CLASS_INIT)s
+{CLASS_INIT}
         # if o is not None, then this is an internal object and its status
         #  should not be modified by the user, nor the stock objects be
         #  accessible for direct inspection or subclassing (as this could
@@ -373,7 +369,7 @@ class Environment(object):
             self.EngineConfig = self._clips_Status()
             self.DebugConfig = self._clips_Debug()
 
-%(MEMBER_FUNCTIONS)s
+{MEMBER_FUNCTIONS}
 
     def __del__(self):
         """environment destructor"""
@@ -475,16 +471,16 @@ def _i_convert_classinstantiation_c(s):
     if s.split()[0] == 'class':
         return s
     for x in ALL_CLASSES.keys():
-        s = s.replace(" %s(" % x, " self.__envobject.%s(" % x)
-        s = s.replace("(%s(" % x, "(self.__envobject.%s(" % x)
+        s = s.replace(f" {x}(", f" self.__envobject.{x}(")
+        s = s.replace(f"({x}(", f"(self.__envobject.{x}(")
     return s
 
 def _i_convert_classinstantiation(s):
     if s.split()[0] == 'class':
         return s
     for x in ALL_CLASSES.keys():
-        s = s.replace(" %s(" % x, " self.%s(" % x)
-        s = s.replace("(%s(" % x, "(self.%s(" % x)
+        s = s.replace(f" {x}(", f" self.{x}(")
+        s = s.replace(f"({x}(", f"(self.{x}(")
     return s
 
 
@@ -508,11 +504,11 @@ def _i_convert_line(s, cvtdef=False):
         li = mo.groups()
         for x in li:
             t = x[3:-1]
-            if "env_%s" % t in IMPORTED_SYMBOLS:
+            if f"env_{t}" in IMPORTED_SYMBOLS:
                 if func_re_NA.search(s1):
-                    s1 = s1.replace(x, "_c.env_%s(self.__env" % t)
+                    s1 = s1.replace(x, f"_c.env_{t}(self.__env")
                 else:
-                    s1 = s1.replace(x, "_c.env_%s(self.__env, " % t)
+                    s1 = s1.replace(x, f"_c.env_{t}(self.__env, ")
     if cvtdef:
         mo = def_re.search(s1)
         if mo:
@@ -521,9 +517,9 @@ def _i_convert_line(s, cvtdef=False):
             else:
                 s1 = def_re.sub(mo.group(0) + "self, ", s1)
         for x in ALL_CLASSES.keys():
-            s1 = s1.replace(" %s(" % x, " self.%s(" % x)
-            s1 = s1.replace(" %s:" % x, " self.%s:" % x)
-            s1 = s1.replace("(%s(" % x, "(self.%s(" % x)
+            s1 = s1.replace(f" {x}(", f" self.{x}(")
+            s1 = s1.replace(f" {x}:", f" self.{x}:")
+            s1 = s1.replace(f"({x}(", f"(self.{x}(")
     return INDENT + _i_convert_classinstantiation(s1)
 
 def _i_convert_classline(s):
@@ -545,11 +541,11 @@ def _i_convert_classline(s):
         li = mo.groups()
         for x in li:
             t = x[3:-1]
-            if "env_%s" % t in IMPORTED_SYMBOLS:
+            if f"env_{t}" in IMPORTED_SYMBOLS:
                 if func_re_NA.search(s1):
-                    s1 = s1.replace(x, "_c.env_%s(self.__env" % t)
+                    s1 = s1.replace(x, f"_c.env_{t}(self.__env")
                 else:
-                    s1 = s1.replace(x, "_c.env_%s(self.__env, " % t)
+                    s1 = s1.replace(x, f"_c.env_{t}(self.__env, ")
     return INDENT + INDENT + _i_convert_classinstantiation_c(s1)
 
 # convert an entire class, provided as a list of lines
@@ -559,14 +555,17 @@ def _i_convert_fullclass(name, li):
     while li1[0].strip()[0] in ['"', "'"]:
         docs.append(li1[0])
         li1 = li1[1:]
-    head1 = INDENT + "def %s(self, private_environment):\n" % name
+    head1 = INDENT + f"def {name}(self, private_environment):\n"
     head2 = INDENT + INDENT + "environment_object = self\n"
-    head3 = INDENT + INDENT + "class %s(object):\n" % name
+    head3 = INDENT + INDENT + f"class {name}(object):\n"
     head4 = INDENT + INDENT + INDENT + "__env = private_environment\n"
     head5 = INDENT + INDENT + INDENT + "__envobject = environment_object\n"
-    foot1 = INDENT + INDENT + "return %s\n"  % name
-    return [head1, head2, head3] + map(_i_convert_classline, docs) \
-       + [head4, head5] + map(_i_convert_classline, li1) + [foot1]
+    foot1 = INDENT + INDENT + f"return {name}\n"
+    return [head1, head2, head3] + \
+            list(map(_i_convert_classline, docs)) + \
+            [head4, head5] + \
+            list(map(_i_convert_classline, li1)) +  \
+            [foot1]
 
 # convert an entire function, provided as a list of lines
 def _i_convert_fullfunction(name, li):
@@ -575,35 +574,32 @@ def _i_convert_fullfunction(name, li):
 # create the list of lines that build inner classes in Environment.__init__
 def _i_create_inner_classes():
     inner = []
-    kclasses = ALL_CLASSES.keys()
-    kclasses.sort()
+    kclasses = sorted([k for k in ALL_CLASSES.keys()])
     for x in kclasses:
         inner.append(
-            INDENT + INDENT + "self.%s = self.%s(self.__env)\n" % (x, x))
+            INDENT + INDENT + f"self.{x} = self.{x}(self.__env)\n")
     return inner
 
 
 # macro to convert all the read module
 def convert_module(filename):
-    f = open(filename)
-    _i_read_module(f)
-    f.close()
+    with open(filename) as f:
+        _i_read_module(f)
     classes = []
-    kclasses = ALL_CLASSES.keys()
-    kclasses.sort()
-    for x in kclasses:
-        classes += _i_convert_fullclass(x, ALL_CLASSES[x])
+    kclasses = sorted([k for k in ALL_CLASSES.keys()])
+    for k in kclasses:
+        classes.extend( _i_convert_fullclass(k, ALL_CLASSES[k]) )
     initclasses = _i_create_inner_classes()
+
     functions = []
-    kfunctions = ALL_FUNCTIONS.keys()
-    kfunctions.sort()
-    for x in kfunctions:
-        functions += _i_convert_fullfunction(x, ALL_FUNCTIONS[x])
-    return MODULE_TEMPLATE % {
-        'MEMBER_CLASSES': "".join(classes),
-        'CLASS_INIT': "".join(initclasses),
-        'MEMBER_FUNCTIONS': "".join(functions),
-        }
+    kfunctions = sorted([k for k in ALL_FUNCTIONS.keys()])
+    for k in kfunctions:
+        functions.extend(_i_convert_fullfunction(k, ALL_FUNCTIONS[k]))
+    return MODULE_TEMPLATE.format(
+        MEMBER_CLASSES   = "".join(classes),
+        CLASS_INIT       = "".join(initclasses),
+        MEMBER_FUNCTIONS = "".join(functions)
+    )
 
 # ========================================================================== #
 
@@ -616,9 +612,9 @@ def get_clips_version(fn):
     for s in li:
         f = cre.search(s)
         if f:
-            vno = f.groups(1)
+            vno = f.group(1)
             break
-    return "%s" % vno
+    return vno
 
 
 
@@ -631,14 +627,14 @@ def get_clips_version(fn):
 nozip_notice = """\
 ERROR: setup.py could not find the CLIPS source files. These files
        are necessary to build the CLIPS interface module: please
-       download the archive (%s) and copy it to the directory
+       download the archive ({}) and copy it to the directory
        where setup.py resides. The setup program will take care of
        unpacking the necessary source files in an appropriate place.
 """
 
 badzip_notice = """\
 ERROR: setup.py could not read one or more file(s) from the source
-       archive. Please provide a good copy of the archive (%s).
+       archive. Please provide a good copy of the archive ({}).
 """
 
 
@@ -667,46 +663,42 @@ def normalize_eols(t):
 if not os.path.exists(ClipsLIB_dir):
     if not os.path.exists(ClipsSrcZIP):
         # try to download file from official site
-        import urllib
-        print "CLIPS source archive (%s) not found, " \
-              "trying to download it for you..." % ClipsSrcZIP
+        import requests
+        print (f"CLIPS source archive ({ClipsSrcZIP}) not found, " \
+              "trying to download it for you...")
         try:
-            f = urllib.urlopen(CLIPS_SRC_URL)
-            s = f.read()
-            if not s:
+            data = requests.get(CLIPS_SRC_URL)
+            if not data:
                 raise   # anyway we'll answer that the source wasn't found
-            f = open(ClipsSrcZIP, 'wb')
-            f.write(s)
-            f.close()
-            print "Download successful, continuing build."
-            print "Please review CLIPS license in the downloaded ZIP file!"
+            with open(ClipsSrcZIP, 'wb') as f:
+                f.write(data.content)
+            print("Download successful, continuing build.")
+            print("Please review CLIPS license in the downloaded ZIP file!")
         except:
-            print "Download FAILED!"
-            print nozip_notice % ClipsSrcZIP
+            print(traceback.format_exc())
+            print("Download FAILED!")
+            print(nozip_notice.format(ClipsSrcZIP))
             sys.exit(2)
     import zipfile
     try:
-        print "Opening CLIPS source archive (%s)..." % ClipsSrcZIP
+        print(f"Opening CLIPS source archive ({ClipsSrcZIP})...")
         zf = zipfile.ZipFile(ClipsSrcZIP)
         os.mkdir(ClipsLIB_dir)
         li = zf.namelist()
         for x in li:
             n = _p(ClipsLIB_dir, os.path.basename(x))
             if n.endswith('.h') or n.endswith('.c'):
-                sys.stdout.write("\tExtracting %s... " % n)
-                li = normalize_eols(zf.read(x))
-                f = open(n, 'w')
-                for t in li:
-                    f.write("%s\n" % t)
-                f.close()
-                sys.stdout.write("done.\n")
+                print(f"\tExtracting {n}... ", end="")
+                with open(n, 'wb') as f:
+                    f.write(zf.read(x))
+                print("done.")
         zf.close()
-        print "All CLIPS source files extracted, continuing build."
+        print("All CLIPS source files extracted, continuing build.")
     except zipfile.error:
-        print badzip_notice % ClipsSrcZIP
+        print(badzip_notice.format(ClipsSrcZIP))
         sys.exit(2)
     except:
-        print nozip_notice % ClipsSrcZIP
+        print(nozip_notice.format(ClipsSrcZIP))
         sys.exit(2)
 
 
@@ -731,7 +723,7 @@ else:
     sys.stderr.write(bad_platform)
     sys.exit(2)
 
-setup_h = setup_h_templ % defines
+setup_h = setup_h_templ.format(defines[0], defines[1], defines[2])
 
 # rename setup.h to setup.h.ORIG to keep a copy of original file; if the
 #  copy already exists, we are supposed to already have built the new
@@ -760,7 +752,7 @@ if os.path.exists(routerc_orig_name) and not os.path.exists(routerc_copy_name):
     f.close()
     os.rename(routerc_orig_name, routerc_copy_name)
     badline_re = re.compile(
-        "\s*EnvDefineFunction2.+exit.+ExitCommand.+ExitCommand.+")
+        r"\s*EnvDefineFunction2.+exit.+ExitCommand.+ExitCommand.+")
     f = open(routerc_orig_name, 'w')
     for l in li:
         if badline_re.match(l):
@@ -803,16 +795,16 @@ sys.stdout.write("Done!\n")
 
 # retrieve used CLIPS version
 clips_version = get_clips_version(_p("clipssrc", "constant.h"))
-print "Found CLIPS version: %s" % clips_version
+print(f"Found CLIPS version: {clips_version}")
 maj, min = clips_version.split('.', 1)
 CFLAGS = [
     '-DPYCLIPS',
-    '-DCLIPS_MAJOR=%s' % maj,
-    '-DCLIPS_MINOR=%s' % min,
-    '-DPYCLIPS_MAJOR=%s' % PYCLIPS_MAJOR,
-    '-DPYCLIPS_MINOR=%s' % PYCLIPS_MINOR,
-    '-DPYCLIPS_PATCHLEVEL=%s' % PYCLIPS_PATCHLEVEL,
-    '-DPYCLIPS_INCREMENTAL=%s' % PYCLIPS_INCREMENTAL,
+    f'-DCLIPS_MAJOR={maj}',
+    f'-DCLIPS_MINOR={min}',
+    f'-DPYCLIPS_MAJOR={PYCLIPS_MAJOR}',
+    f'-DPYCLIPS_MINOR={PYCLIPS_MINOR}',
+    f'-DPYCLIPS_PATCHLEVEL={PYCLIPS_PATCHLEVEL}',
+    f'-DPYCLIPS_INCREMENTAL={PYCLIPS_INCREMENTAL}',
     ]
 
 
@@ -843,51 +835,52 @@ if uses_gcc:
 
 
 # apply "optional" patches
-i, o, e = os.popen3("patch --version")
-vs = o.read()
-o.close()
-e.close()
+vs = None
+with subprocess.Popen(["patch", "--version"], stdout=subprocess.PIPE) as p:
+    vs, _ = p.communicate()
+
+# i, o, e = os.popen3("patch --version")
+# vs = o.read()
+# o.close()
+# e.close()
 if vs:
-    print "'patch' utility found, applying selected patchsets..."
+    print("'patch' utility found, applying selected patchsets...")
     import shutil
     def apply_patchset(ps):
-        print "Applying patchset '%s':" % ps
-        pattern = "*.[ch]-??.v%s-%s.diff" % (clips_version, ps)
+        print(f"Applying patchset '{ps}':")
+        pattern = f"*.[ch]-??.v{clips_version}-{ps}.diff"
         for x in glob(_p(ClipsPATCH_dir, pattern)):
             pfn = os.path.basename(x)
             sourcefile = pfn.split('-', 1)[0]
-            if not os.path.exists(_p(ClipsLIB_dir, "%s.ORIG" % sourcefile)):
+            if not os.path.exists(_p(ClipsLIB_dir, f"{sourcefile}.ORIG")):
                 sys.stdout.write(
-                    "patching %s (original in %s.ORIG)... " % (
-                        sourcefile, sourcefile))
+                    f"patching {sourcefile} (original in {sourcefile}.ORIG)... "
+                    )
                 shutil.copy(
                     _p(ClipsLIB_dir, sourcefile),
-                    _p(ClipsLIB_dir, "%s.ORIG" % sourcefile)
+                    _p(ClipsLIB_dir, f"{sourcefile}.ORIG")
                     )
-                patchcmd = "patch -l -s -p0 %s < %s" % (
+                patchcmd = "patch -l -s -p0 {} < {}".format(
                     _p(ClipsLIB_dir, sourcefile), x)
                 if not os.system(patchcmd):
-                    print "ok."
+                    print("ok.")
                 else:
-                    print "FAILED"
+                    print("FAILED")
     for x in APPLY_PATCHSETS:
         apply_patchset(x)
 
 
 # create the version submodule
-sys.stdout.write("Creating version number: ")
-f = open(_p('clips', '_version.py'), 'w')
-f.write("""# version number
-version_string = "%s"
-version = (%s, %s, %s, %s)
-""" % (PYCLIPS_VERSION, PYCLIPS_MAJOR,
-       PYCLIPS_MINOR, PYCLIPS_PATCHLEVEL,
-       PYCLIPS_INCREMENTAL))
-f.close()
+print("Creating version number: ", end="")
+with open(_p('clips', '_version.py'), 'w') as f:
+    f.write(f'# version number\n')
+    f.write(f'version_string = "{PYCLIPS_VERSION}"\n')
+    f.write(f'version = ({PYCLIPS_MAJOR}, {PYCLIPS_MINOR}, ')
+    f.write(f'{PYCLIPS_PATCHLEVEL}, {PYCLIPS_INCREMENTAL})\n')
+
 
 # start setup
-print "Standard setup in progress:"
-
+print("Standard setup in progress:")
 
 # The following is a warning to users of ez_setup when using GCC (for
 # instance MinGW) and it is set as the default compiler, since it is
@@ -912,9 +905,9 @@ if not DEBUGGING:
         import ez_setup
         ez_setup.use_setuptools()
         from setuptools import setup, Extension
-        print "Using setuptools instead of distutils..."
+        print("Using setuptools instead of distutils...")
         if not uses_gcc:
-            print warn_default_gcc
+            print(warn_default_gcc)
     except:
         from distutils.core import setup, Extension
 else:
@@ -922,7 +915,7 @@ else:
 
 
 setup(name="pyclips",
-      version="%s-clips_%s" % (PYCLIPS_VERSION, clips_version),
+      version=f"{PYCLIPS_VERSION}-clips_{clips_version}",
       description="Python CLIPS interface",
       long_description=__doc__,
       author="Francesco Garosi",
