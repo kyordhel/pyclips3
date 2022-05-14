@@ -702,6 +702,7 @@ globle unsigned ItemHashValue(
   void *theValue,
   unsigned theRange)
   {
+   size_t i_theValue;
    switch(theType)
      {
       case FLOAT:
@@ -729,7 +730,8 @@ globle unsigned ItemHashValue(
 #if OBJECT_SYSTEM
       case INSTANCE_ADDRESS:
 #endif
-        return(((unsigned) theValue) % theRange);
+        i_theValue = (size_t)theValue;
+        return(((unsigned) i_theValue) % theRange);
      }
 
    SystemError(theEnv,"UTILITY",1);

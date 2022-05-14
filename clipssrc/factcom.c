@@ -308,7 +308,11 @@ globle void RetractCommand(
            { EnvRetract(theEnv,(void *) ptr); }
          else
            {
+#ifdef PTR64
+            char tempBuffer[25];
+#else
             char tempBuffer[20];
+#endif
             sprintf(tempBuffer,"f-%ld",factIndex);
             CantFindItemErrorMessage(theEnv,"fact",tempBuffer);
            }

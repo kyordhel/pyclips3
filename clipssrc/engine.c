@@ -308,7 +308,7 @@ globle long int EnvRun(
 
       theBasis->busy = FALSE;
 
-      for (i = 0; i < (theBasis->bcount - 1); i++)
+      for (i = 0; i < (size_t)(theBasis->bcount - 1); i++)
         {
          theMatchingItem = theBasis->binds[i].gm.theMatch->matchingItem;
          if (theMatchingItem != NULL)

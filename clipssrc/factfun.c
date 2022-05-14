@@ -618,7 +618,11 @@ globle struct fact *GetFactAddressOrIndexArgument(
    DATA_OBJECT item;
    long factIndex;
    struct fact *theFact;
+#ifdef PTR64
+   char tempBuffer[25];
+#else
    char tempBuffer[20];
+#endif
 
    EnvRtnUnknown(theEnv,position,&item);
 

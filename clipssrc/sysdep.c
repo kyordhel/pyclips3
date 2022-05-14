@@ -1239,9 +1239,10 @@ globle void GenReadBinary(
    unsigned int temp, number_of_reads, read_size;
 
    if (sizeof(int) == sizeof(long))
-     { read_size = size; }
-   else
-     { read_size = (1L << (sizeof(int) * 8L)) - 1L ; }
+      read_size = size;
+   else{
+      read_size = (1L << (sizeof(int) * 8L)) - 1L ;
+   }
    number_of_reads = size / read_size;
    temp = size - ((long) number_of_reads * (long) read_size);
 

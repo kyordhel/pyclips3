@@ -894,7 +894,7 @@ unsigned int GetAtomicHashValue(
   void *value,
   int position)
   {
-   unsigned int tvalue;
+   size_t tvalue;
    union
      {
       double fv;
@@ -917,7 +917,7 @@ unsigned int GetAtomicHashValue(
       case INSTANCE_ADDRESS:
 #endif
       case EXTERNAL_ADDRESS:
-         tvalue = (unsigned int) value;
+         tvalue = (size_t) value;
          break;
 
       case STRING:

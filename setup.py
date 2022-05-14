@@ -90,6 +90,21 @@ setup_h_templ = """\
 #ifndef _H_setup
 #define _H_setup
 
+#include <stdint.h>
+
+#if UINTPTR_MAX == 0xFFFF
+    #define PTR16
+    #define PTR_SIZE 16
+#elif UINTPTR_MAX == 0xFFFFFFFF
+    #define PTR32
+    #define PTR_SIZE 32
+#elif UINTPTR_MAX == 0xFFFFFFFFFFFFFFFFu
+    #define PTR64
+    #define PTR_SIZE 64
+#else
+    #error Unknown pointer size
+#endif
+
 #define GENERIC 0
 #define UNIX_V  {}
 #define UNIX_7  0

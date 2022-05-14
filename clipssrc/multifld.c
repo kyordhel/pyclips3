@@ -608,6 +608,7 @@ unsigned HashMultifield(
       double fv;
       unsigned int liv;
      } fis;
+   size_t fptrval;
 
    /*================================================*/
    /* Initialize variables for computing hash value. */
@@ -648,7 +649,9 @@ unsigned HashMultifield(
 #if OBJECT_SYSTEM
           case INSTANCE_ADDRESS:
 #endif
-            count += (unsigned int) (((int) fieldPtr[i].value) * (i + 29));
+            // count += (unsigned int) (((int) fieldPtr[i].value) * (i + 29));
+            fptrval = (size_t)fieldPtr[i].value;
+            count += (unsigned int) (((int) fptrval) * (i + 29));
             break;
 
           case SYMBOL:

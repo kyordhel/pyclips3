@@ -206,7 +206,11 @@ static void DuplicateModifyCommand(
 
       if (oldFact == NULL)
         {
+#ifdef PTR64
+         char tempBuffer[25];
+#else
          char tempBuffer[20];
+#endif
          sprintf(tempBuffer,"f-%ld",factNum);
          CantFindItemErrorMessage(theEnv,"fact",tempBuffer);
          return;

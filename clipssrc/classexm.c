@@ -232,9 +232,17 @@ globle void EnvDescribeClass(
         maxSlotNameLength = 16;
       if (maxOverrideMessageLength > 12)
         maxOverrideMessageLength = 12;
-      sprintf(slotNamePrintFormat,"%%-%ld.%lds : ",maxSlotNameLength,maxSlotNameLength);
-      sprintf(overrideMessagePrintFormat,"%%-%ld.%lds ",maxOverrideMessageLength,
+
+#ifdef PTR64
+      sprintf(slotNamePrintFormat,"%%-%lu.%lus : ",maxSlotNameLength,maxSlotNameLength);
+      sprintf(overrideMessagePrintFormat,"%%-%lu.%lus ",maxOverrideMessageLength,
                                               maxOverrideMessageLength);
+#else
+      sprintf(slotNamePrintFormat,"%%-%u.%us : ",maxSlotNameLength,maxSlotNameLength);
+      sprintf(overrideMessagePrintFormat,"%%-%u.%us ",maxOverrideMessageLength,
+                                              maxOverrideMessageLength);
+#endif
+
       DisplaySlotBasicInfo(theEnv,logicalName,slotNamePrintFormat,overrideMessagePrintFormat,buf,cls);
       EnvPrintRouter(theEnv,logicalName,"\nConstraint information for slots:\n\n");
       DisplaySlotConstraintInfo(theEnv,logicalName,slotNamePrintFormat,buf,82,cls);
