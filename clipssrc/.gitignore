@@ -1,0 +1,8 @@
+# Ignore everything
+*
+# But these files
+.gitignore
+Makefile
+# And these filetypes
+!*.c*
+!*.h*

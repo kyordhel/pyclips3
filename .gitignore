@@ -1,0 +1,26 @@
+# Ignore everything
+*
+# But these files
+!.gitignore
+!FAQ
+!README
+!requirements.txt
+
+!CLIPSSrc.zip
+
+!build.sh
+!clips_or.c
+!clips_or.h
+!clipsmodule.c
+!clipsmodule.h
+!ez_setup.py
+!loptr.c
+!setup.py
+
+# And these subdirectories
+!doc/
+!clips/
+!clipssrc/
+!optpatch/
+!testsuite/
+
