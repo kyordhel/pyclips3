@@ -607,7 +607,7 @@ void EnvUserFunctions(void *env) {
 
 
 /* a Python type representing a standalone CLIPS environment */
-staticforward PyTypeObject clips_EnvType;
+static PyTypeObject clips_EnvType;
 
 typedef struct {
     PyObject_HEAD
@@ -676,7 +676,7 @@ static PyTypeObject clips_EnvType = {
 
 
 /* a Python Type representing a CLIPS deftemplate object */
-staticforward PyTypeObject clips_DeftemplType;
+static PyTypeObject clips_DeftemplType;
 
 typedef struct {
     PyObject_HEAD
@@ -713,7 +713,7 @@ static PyTypeObject clips_DeftemplType = {
 
 
 /* a Python Type representing a CLIPS fact object */
-staticforward PyTypeObject clips_FactType;
+static PyTypeObject clips_FactType;
 
 typedef struct {
     PyObject_HEAD
@@ -998,7 +998,7 @@ static PyTypeObject clips_FactType = {
 
 
 /* a Python Type representing a CLIPS address object */
-staticforward PyTypeObject clips_AddressType;
+static PyTypeObject clips_AddressType;
 
 typedef struct {
     PyObject_HEAD
@@ -1039,7 +1039,7 @@ static PyTypeObject clips_AddressType = {
 
 
 /* a Python Type representing a CLIPS deffacts object */
-staticforward PyTypeObject clips_DeffactsType;
+static PyTypeObject clips_DeffactsType;
 
 typedef struct {
     PyObject_HEAD
@@ -1076,7 +1076,7 @@ static PyTypeObject clips_DeffactsType = {
 
 
 /* a Python Type representing a CLIPS defrule object */
-staticforward PyTypeObject clips_DefruleType;
+static PyTypeObject clips_DefruleType;
 
 typedef struct {
     PyObject_HEAD
@@ -1113,7 +1113,7 @@ static PyTypeObject clips_DefruleType = {
 
 
 /* a Python Type representing a CLIPS activation object */
-staticforward PyTypeObject clips_ActivationType;
+static PyTypeObject clips_ActivationType;
 
 typedef struct {
     PyObject_HEAD
@@ -1150,7 +1150,7 @@ static PyTypeObject clips_ActivationType = {
 
 
 /* a Python Type representing a CLIPS defglobal object */
-staticforward PyTypeObject clips_DefglobalType;
+static PyTypeObject clips_DefglobalType;
 
 typedef struct {
     PyObject_HEAD
@@ -1187,7 +1187,7 @@ static PyTypeObject clips_DefglobalType = {
 
 
 /* a Python Type representing a CLIPS deffunction object */
-staticforward PyTypeObject clips_DeffunctionType;
+static PyTypeObject clips_DeffunctionType;
 
 typedef struct {
     PyObject_HEAD
@@ -1224,7 +1224,7 @@ static PyTypeObject clips_DeffunctionType = {
 
 
 /* a Python Type representing a CLIPS defgeneric object */
-staticforward PyTypeObject clips_DefgenericType;
+static PyTypeObject clips_DefgenericType;
 
 typedef struct {
     PyObject_HEAD
@@ -1261,7 +1261,7 @@ static PyTypeObject clips_DefgenericType = {
 
 
 /* a Python Type representing a CLIPS defmethod object */
-staticforward PyTypeObject clips_DefmethodType;
+static PyTypeObject clips_DefmethodType;
 
 typedef struct {
     PyObject_HEAD
@@ -1298,7 +1298,7 @@ static PyTypeObject clips_DefmethodType = {
 
 
 /* a Python Type representing a CLIPS defclass object */
-staticforward PyTypeObject clips_DefclassType;
+static PyTypeObject clips_DefclassType;
 
 typedef struct {
     PyObject_HEAD
@@ -1335,7 +1335,7 @@ static PyTypeObject clips_DefclassType = {
 
 
 /* a Python Type representing a CLIPS instance object */
-staticforward PyTypeObject clips_InstanceType;
+static PyTypeObject clips_InstanceType;
 
 typedef struct {
     PyObject_HEAD
@@ -1400,7 +1400,7 @@ static PyTypeObject clips_InstanceType = {
 
 
 /* a Python Type representing a CLIPS definstances object */
-staticforward PyTypeObject clips_DefinstancesType;
+static PyTypeObject clips_DefinstancesType;
 
 typedef struct {
     PyObject_HEAD
@@ -1437,7 +1437,7 @@ static PyTypeObject clips_DefinstancesType = {
 
 
 /* a Python Type representing a CLIPS defmodule object */
-staticforward PyTypeObject clips_DefmoduleType;
+static PyTypeObject clips_DefmoduleType;
 
 typedef struct {
     PyObject_HEAD
@@ -18059,7 +18059,7 @@ UNIMPLEMENT(setCurrentEnvironmentByIndex, v_setCurrentEnvironmentByIndex)
 
 
 /* treat an I/O buffer (a file-like behaving object) as a Python object */
-staticforward PyTypeObject buffer_Type;
+static PyTypeObject buffer_Type;
 
 typedef struct {
     PyObject_HEAD
@@ -18809,7 +18809,7 @@ END_FAIL
  * a module user; it is also not guaranteed to function asexpected
  */
 
-staticforward PyTypeObject guard_Type;
+static PyTypeObject guard_Type;
 
 typedef struct {
     PyObject_HEAD
@@ -18864,7 +18864,7 @@ static PyTypeObject guard_Type = {
 /* also prepare an object living in module namespace with an unusable name */
 #define PREPARE_DEALLOC_ENV() guard_Object *_ig = NULL;
 #define INSTALL_DEALLOC_ENV(_m) do { \
-        guard_Type.ob_type = &PyType_Type; \
+        Py_TYPE(&guard_Type) = &PyType_Type; \
         _ig = PyObject_New(guard_Object, &guard_Type); \
         PyModule_AddObject(_m, "__PyCLIPS_$iGuardObject__", (PyObject *)_ig); \
     } while(0)
@@ -19538,19 +19538,19 @@ init_clips(void) {
     PyDict_SetItemString(d, "ClipsMemoryError", PyExc_ClipsMemoryError);
 
     /* setup ob_type for types defined here */
-    clips_EnvType.ob_type = &PyType_Type;
-    clips_DeftemplType.ob_type = &PyType_Type;
-    clips_FactType.ob_type = &PyType_Type;
-    clips_DefmoduleType.ob_type = &PyType_Type;
-    clips_DeffactsType.ob_type = &PyType_Type;
-    clips_ActivationType.ob_type = &PyType_Type;
-    clips_DefglobalType.ob_type = &PyType_Type;
-    clips_DeffunctionType.ob_type = &PyType_Type;
-    clips_DefgenericType.ob_type = &PyType_Type;
-    clips_DefmethodType.ob_type = &PyType_Type;
-    clips_DefclassType.ob_type = &PyType_Type;
+    Py_TYPE(&clips_EnvType)         = &PyType_Type;
+    Py_TYPE(&clips_DeftemplType)    = &PyType_Type;
+    Py_TYPE(&clips_FactType)        = &PyType_Type;
+    Py_TYPE(&clips_DefmoduleType)   = &PyType_Type;
+    Py_TYPE(&clips_DeffactsType)    = &PyType_Type;
+    Py_TYPE(&clips_ActivationType)  = &PyType_Type;
+    Py_TYPE(&clips_DefglobalType)   = &PyType_Type;
+    Py_TYPE(&clips_DeffunctionType) = &PyType_Type;
+    Py_TYPE(&clips_DefgenericType)  = &PyType_Type;
+    Py_TYPE(&clips_DefmethodType)   = &PyType_Type;
+    Py_TYPE(&clips_DefclassType)    = &PyType_Type;
 
-    buffer_Type.ob_type = &PyType_Type;
+    Py_TYPE(&buffer_Type)            = &PyType_Type;
 
     /* initialize the router system */
     clips_Streams = (PyDictObject *)PyDict_New();

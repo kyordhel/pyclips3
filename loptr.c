@@ -12,7 +12,7 @@
  * (c) 2008 - Francesco Garosi/JKS
  */
 
-
+#include <stdlib.h>
 
 /* the kind of integers we will be dealing with */
 #define LOPTR_INT unsigned long
