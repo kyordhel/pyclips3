@@ -316,8 +316,8 @@ ClipsError = _c.ClipsError
 #  reference the ones defined in te low-level module mclips3
 
 # check Python version, and issue an exception if not supported
-if _sys.version[:3] < "2.4":
-    raise _c.ClipsError("M99: Python 2.4 or higher required")
+if _sys.version[:3] < "3.5":
+    raise _c.ClipsError("M99: Python 3.5 or higher required")
 
 
 # these globals are redefined instead of reimported for sake of speed

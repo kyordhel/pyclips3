@@ -25,6 +25,7 @@ clips - high-level interface to the CLIPS engine module
 """
 
 __revision__ = "$Id: _clips_wrap.py 342 2008-02-22 01:17:23Z Franz $"
+__revision__ = "$Id: _clips_wrap.py 342 2022-05-18 14:24:00Z Matamoros $"
 
 # ========================================================================== #
 # imports - these are hidden to module user
@@ -37,8 +38,8 @@ import os as  _os
 import clips.mclips3 as _c
 
 # check Python version, and issue an exception if not supported
-if _sys.version[:3] < "2.4":
-    raise _c.ClipsError("M99: Python 2.4 or higher required")
+if _sys.version[:3] < "3.5":
+    raise _c.ClipsError("M99: Python 3.5 or higher required")
 
 
 # ========================================================================== #
