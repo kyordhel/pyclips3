@@ -12765,7 +12765,6 @@ arguments:\n\
   defglobal (defglobal) - the defglobal to inspect";
 static PyObject *e_defglobalModule(PyObject *self, PyObject *args) {
     clips_EnvObject *pyenv = NULL;
-    void *env = NULL;
     clips_DefglobalObject *p = NULL;
     char *s = NULL;
 
@@ -12773,9 +12772,11 @@ static PyObject *e_defglobalModule(PyObject *self, PyObject *args) {
                          &clips_EnvType, &pyenv, &clips_DefglobalType, &p))
         FAIL();
     CHECK_VALID_ENVIRONMENT(pyenv);
-    env = clips_environment_value(pyenv);
     ACQUIRE_MEMORY_ERROR();
-    s = EnvDefglobalModule(env, clips_defglobal_value(p));
+    s = EnvDefglobalModule(
+        clips_environment_value(pyenv),
+        clips_defglobal_value(p)
+        );
     RELEASE_MEMORY_ERROR();
     if(!s) {
         ERROR_CLIPS_RETVAL();
@@ -13949,15 +13950,15 @@ arguments:\n\
   defgeneric (defgeneric) - the defgeneric to be inspected";
 static PyObject *e_isDefgenericDeletable(PyObject *self, PyObject *args) {
     clips_EnvObject *pyenv = NULL;
-    void *env = NULL;
     clips_DefgenericObject *p = NULL;
+    // void* env = NULL;
     int i = 0;
 
     if(!PyArg_ParseTuple(args, "O!O!",
                          &clips_EnvType, &pyenv, &clips_DefgenericType, &p))
         FAIL();
     CHECK_VALID_ENVIRONMENT(pyenv);
-    env = clips_environment_value(pyenv);
+    // clips_environment_value(pyenv);
     i = IsDefgenericDeletable(clips_defgeneric_value(p));
     RETURN_BOOL(i);
 
