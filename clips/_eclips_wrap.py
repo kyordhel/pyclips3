@@ -21,6 +21,7 @@
 
 """clips - high-level interface to the CLIPS engine module
         (c) 2002-2008 Francesco Garosi/JKS
+        Compatibility for Python 3.5+ by Mauricio Matamoros
 """
 
 # standard imports
@@ -30,7 +31,7 @@ import os as  _os
 import types as _types
 
 # the low-level module
-import mclips3 as _c
+import clips.mclips3 as _c
 
 
 # ========================================================================== #
@@ -73,13 +74,14 @@ CONSERVATION_MODE = _c.CONSERVATION_MODE
 
 
 # import adequate symbols from _clips_wrap
-from _clips_wrap import Nil, Integer, Float, String, Symbol, InstanceName, \
-                        Multifield, _cl2py, _py2cl, _py2clsyntax, \
-                        ClipsIntegerType, ClipsFloatType, ClipsStringType, \
-                        ClipsSymbolType, ClipsInstanceNameType, \
-                        ClipsMultifieldType, ClipsNilType, \
-                        _setStockClasses, _accepts_method, _forces_method, \
-                        AROUND, BEFORE, PRIMARY, AFTER
+from clips._clips_wrap import \
+    Nil, Integer, Float, String, Symbol, InstanceName, \
+    Multifield, _cl2py, _py2cl, _py2clsyntax, \
+    ClipsIntegerType, ClipsFloatType, ClipsStringType, \
+    ClipsSymbolType, ClipsInstanceNameType, \
+    ClipsMultifieldType, ClipsNilType, \
+    _setStockClasses, _accepts_method, _forces_method, \
+    AROUND, BEFORE, PRIMARY, AFTER
 
 
 
