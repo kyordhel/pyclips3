@@ -940,7 +940,7 @@ setup(name="pyclips",
       ext_modules=[
           Extension('clips.mclips3',
                     main_clipssrc + all_clipssrc,
-                    extra_compile_args=CFLAGS + [ "-pedantic", "-Wno-missing-braces" ],
+                    extra_compile_args=CFLAGS + [ "-pedantic" ],
                     include_dirs=[ClipsLIB_dir]),
           ],
      )

@@ -657,7 +657,7 @@ static void clips_EnvObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_EnvType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.environment",
     sizeof(clips_EnvObject),    /* tp_basicsize */
     0,                          /* tp_itemsize */
@@ -700,7 +700,7 @@ static void clips_DeftemplObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_DeftemplType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.deftemplate",
     sizeof(clips_DeftemplObject),
     0,
@@ -984,7 +984,7 @@ static void clips_FactObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_FactType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.fact",
     sizeof(clips_FactObject),
     0,
@@ -1024,7 +1024,7 @@ static void clips_AddressObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_AddressType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.address",
     sizeof(clips_AddressObject),
     0,
@@ -1060,7 +1060,7 @@ static void clips_DeffactsObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_DeffactsType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.deffacts",
     sizeof(clips_DeffactsObject),
     0,
@@ -1096,7 +1096,7 @@ static void clips_DefruleObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_DefruleType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.defrule",
     sizeof(clips_DefruleObject),
     0,
@@ -1132,7 +1132,7 @@ static void clips_ActivationObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_ActivationType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.activation",
     sizeof(clips_ActivationObject),
     0,
@@ -1168,7 +1168,7 @@ static void clips_DefglobalObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_DefglobalType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.defglobal",
     sizeof(clips_DefglobalObject),
     0,
@@ -1204,7 +1204,7 @@ static void clips_DeffunctionObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_DeffunctionType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.deffunction",
     sizeof(clips_DeffunctionObject),
     0,
@@ -1240,7 +1240,7 @@ static void clips_DefgenericObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_DefgenericType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.defgeneric",
     sizeof(clips_DefgenericObject),
     0,
@@ -1276,7 +1276,7 @@ static void clips_DefmethodObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_DefmethodType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.defmethod",
     sizeof(clips_DefmethodObject),
     0,
@@ -1314,7 +1314,7 @@ static void clips_DefclassObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_DefclassType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.defclass",
     sizeof(clips_DefclassObject),/* tp_basicsize */
     0,                          /* tp_itemsize */
@@ -1385,7 +1385,7 @@ static void clips_InstanceObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_InstanceType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.instance",
     sizeof(clips_InstanceObject),
     0,
@@ -1421,7 +1421,7 @@ static void clips_DefinstancesObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_DefinstancesType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.definstances",
     sizeof(clips_DefinstancesObject),
     0,
@@ -1457,7 +1457,7 @@ static void clips_DefmoduleObject_dealloc(PyObject *self) {
 }
 
 static PyTypeObject clips_DefmoduleType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.defmodule",
     sizeof(clips_DefmoduleObject),
     0,
@@ -18072,7 +18072,7 @@ typedef struct {
 
 /* the Python buffer Type */
 static PyTypeObject buffer_Type = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "mclips3.buffer_Object",    /* tp_name */
     sizeof(buffer_Object), /* tp_basicsize */
     0,                         /* tp_itemsize */
@@ -18096,7 +18096,7 @@ static PyTypeObject buffer_Type = {
 };
 
 // static PyTypeObject buffer_Type = {
-//     PyObject_HEAD_INIT(NULL)
+//     PyVarObject_HEAD_INIT(NULL, 0)
 //     0,
 //     "streambuffer",
 //     sizeof(buffer_Object),
