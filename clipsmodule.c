@@ -658,20 +658,26 @@ static void clips_EnvObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_EnvType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.environment",
-    sizeof(clips_EnvObject),
-    0,
-    clips_EnvObject_dealloc, /*tp_dealloc*/
-    0,          /*tp_print*/
-    0,          /*tp_getattr*/
-    0,          /*tp_setattr*/
-    0,          /*tp_compare*/
-    0,          /*tp_repr*/
-    0,          /*tp_as_number*/
-    0,          /*tp_as_sequence*/
-    0,          /*tp_as_mapping*/
-    0,          /*tp_hash */
+    sizeof(clips_EnvObject),    /* tp_basicsize */
+    0,                          /* tp_itemsize */
+    clips_EnvObject_dealloc,    /*tp_dealloc*/
+    0,                          /*tp_print*/
+    0,                          /*tp_getattr*/
+    0,                          /*tp_setattr*/
+    0,                          /* tp_reserved */
+    0,                          /* tp_repr */
+    0,                          /* tp_as_number */
+    0,                          /* tp_as_sequence */
+    0,                          /* tp_as_mapping */
+    0,                          /* tp_hash  */
+    0,                          /* tp_call */
+    0,                          /* tp_str */
+    0,                          /* tp_getattro */
+    0,                          /* tp_setattro */
+    0,                          /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,         /* tp_flags */
+    "PyCLIPS guard type ",      /* tp_doc */
 };
 
 
@@ -695,7 +701,6 @@ static void clips_DeftemplObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_DeftemplType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.deftemplate",
     sizeof(clips_DeftemplObject),
     0,
@@ -980,7 +985,6 @@ static void clips_FactObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_FactType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.fact",
     sizeof(clips_FactObject),
     0,
@@ -1021,7 +1025,6 @@ static void clips_AddressObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_AddressType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.address",
     sizeof(clips_AddressObject),
     0,
@@ -1058,7 +1061,6 @@ static void clips_DeffactsObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_DeffactsType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.deffacts",
     sizeof(clips_DeffactsObject),
     0,
@@ -1095,7 +1097,6 @@ static void clips_DefruleObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_DefruleType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.defrule",
     sizeof(clips_DefruleObject),
     0,
@@ -1132,7 +1133,6 @@ static void clips_ActivationObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_ActivationType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.activation",
     sizeof(clips_ActivationObject),
     0,
@@ -1169,7 +1169,6 @@ static void clips_DefglobalObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_DefglobalType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.defglobal",
     sizeof(clips_DefglobalObject),
     0,
@@ -1206,7 +1205,6 @@ static void clips_DeffunctionObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_DeffunctionType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.deffunction",
     sizeof(clips_DeffunctionObject),
     0,
@@ -1243,7 +1241,6 @@ static void clips_DefgenericObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_DefgenericType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.defgeneric",
     sizeof(clips_DefgenericObject),
     0,
@@ -1280,7 +1277,6 @@ static void clips_DefmethodObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_DefmethodType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.defmethod",
     sizeof(clips_DefmethodObject),
     0,
@@ -1294,6 +1290,8 @@ static PyTypeObject clips_DefmethodType = {
     0,          /*tp_as_sequence*/
     0,          /*tp_as_mapping*/
     0,          /*tp_hash */
+
+
 };
 
 
@@ -1317,20 +1315,26 @@ static void clips_DefclassObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_DefclassType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.defclass",
-    sizeof(clips_DefclassObject),
-    0,
+    sizeof(clips_DefclassObject),/* tp_basicsize */
+    0,                          /* tp_itemsize */
     clips_DefclassObject_dealloc, /*tp_dealloc*/
-    0,          /*tp_print*/
-    0,          /*tp_getattr*/
-    0,          /*tp_setattr*/
-    0,          /*tp_compare*/
-    0,          /*tp_repr*/
-    0,          /*tp_as_number*/
-    0,          /*tp_as_sequence*/
-    0,          /*tp_as_mapping*/
-    0,          /*tp_hash */
+    0,                          /*tp_print*/
+    0,                          /*tp_getattr*/
+    0,                          /*tp_setattr*/
+    0,                          /* tp_reserved */
+    0,                          /* tp_repr */
+    0,                          /* tp_as_number */
+    0,                          /* tp_as_sequence */
+    0,                          /* tp_as_mapping */
+    0,                          /* tp_hash  */
+    0,                          /* tp_call */
+    0,                          /* tp_str */
+    0,                          /* tp_getattro */
+    0,                          /* tp_setattro */
+    0,                          /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,         /* tp_flags */
+    "PyCLIPS guard type ",      /* tp_doc */
 };
 
 
@@ -1382,7 +1386,6 @@ static void clips_InstanceObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_InstanceType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.instance",
     sizeof(clips_InstanceObject),
     0,
@@ -1419,7 +1422,6 @@ static void clips_DefinstancesObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_DefinstancesType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.definstances",
     sizeof(clips_DefinstancesObject),
     0,
@@ -1456,7 +1458,6 @@ static void clips_DefmoduleObject_dealloc(PyObject *self) {
 
 static PyTypeObject clips_DefmoduleType = {
     PyObject_HEAD_INIT(NULL)
-    0,
     "mclips3.defmodule",
     sizeof(clips_DefmoduleObject),
     0,
@@ -18059,8 +18060,6 @@ UNIMPLEMENT(setCurrentEnvironmentByIndex, v_setCurrentEnvironmentByIndex)
 
 
 /* treat an I/O buffer (a file-like behaving object) as a Python object */
-static PyTypeObject buffer_Type;
-
 typedef struct {
     PyObject_HEAD
     char *name;
@@ -18069,6 +18068,50 @@ typedef struct {
     size_t size;
     BOOL py_readonly;   /* this flag is only used by Python interface */
 } buffer_Object;
+
+/* the Python buffer Type */
+static PyTypeObject buffer_Type = {
+    PyObject_HEAD_INIT(NULL)
+    "mclips3.buffer_Object",    /* tp_name */
+    sizeof(buffer_Object), /* tp_basicsize */
+    0,                         /* tp_itemsize */
+    0,                         /* tp_dealloc */
+    0,                         /* tp_print */
+    0,                         /* tp_getattr */
+    0,                         /* tp_setattr */
+    0,                         /* tp_reserved */
+    0,                         /* tp_repr */
+    0,                         /* tp_as_number */
+    0,                         /* tp_as_sequence */
+    0,                         /* tp_as_mapping */
+    0,                         /* tp_hash  */
+    0,                         /* tp_call */
+    0,                         /* tp_str */
+    0,                         /* tp_getattro */
+    0,                         /* tp_setattro */
+    0,                         /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,        /* tp_flags */
+    "buffer objects",          /* tp_doc */
+};
+
+// static PyTypeObject buffer_Type = {
+//     PyObject_HEAD_INIT(NULL)
+//     0,
+//     "streambuffer",
+//     sizeof(buffer_Object),
+//     0,
+//     buffer_dealloc, /*tp_dealloc*/
+//     0,          /*tp_print*/
+//     0,          /*tp_getattr*/
+//     0,          /*tp_setattr*/
+//     0,          /*tp_compare*/
+//     0,          /*tp_repr*/
+//     0,          /*tp_as_number*/
+//     0,          /*tp_as_sequence*/
+//     0,          /*tp_as_mapping*/
+//     0,          /*tp_hash */
+// };
+
 
 #define buffer_Check(v) ((v)->ob_type == &buffer_Type)
 #define buffer_Name(v) (((buffer_Object *)(v))->name)
@@ -18219,26 +18262,6 @@ static int buffer_ungetchar(buffer_Object *o, int c) {
         return c;
     } else return -1;
 }
-
-/* the Python buffer Type */
-static PyTypeObject buffer_Type = {
-    PyObject_HEAD_INIT(NULL)
-    0,
-    "mclips3.buffer_Object",
-    sizeof(buffer_Object),
-    0,
-    buffer_dealloc, /*tp_dealloc*/
-    0,          /*tp_print*/
-    0,          /*tp_getattr*/
-    0,          /*tp_setattr*/
-    0,          /*tp_compare*/
-    0,          /*tp_repr*/
-    0,          /*tp_as_number*/
-    0,          /*tp_as_sequence*/
-    0,          /*tp_as_mapping*/
-    0,          /*tp_hash */
-};
-
 
 /* stream dictionary handlers */
 static BOOL bufdict_Add(char *name, BOOL readonly) {
@@ -19515,6 +19538,36 @@ static PyMethodDef g_methods[] = {
 };
 
 
+
+static inline int IntializeTypes(){
+    if(PyType_Ready(&clips_EnvType)) fprintf(stderr, "Type: clips_EnvType\n");
+    if(PyType_Ready(&clips_DeftemplType)) fprintf(stderr, "Type: clips_DeftemplType\n");
+    if(PyType_Ready(&clips_FactType)) fprintf(stderr, "Type: clips_FactType\n");
+    if(PyType_Ready(&clips_DefmoduleType)) fprintf(stderr, "Type: clips_DefmoduleType\n");
+    if(PyType_Ready(&clips_DeffactsType)) fprintf(stderr, "Type: clips_DeffactsType\n");
+    if(PyType_Ready(&clips_ActivationType)) fprintf(stderr, "Type: clips_ActivationType\n");
+    if(PyType_Ready(&clips_DefglobalType)) fprintf(stderr, "Type: clips_DefglobalType\n");
+    if(PyType_Ready(&clips_DeffunctionType)) fprintf(stderr, "Type: clips_DeffunctionType\n");
+    if(PyType_Ready(&clips_DefgenericType)) fprintf(stderr, "Type: clips_DefgenericType\n");
+    if(PyType_Ready(&clips_DefmethodType)) fprintf(stderr, "Type: clips_DefmethodType\n");
+    if(PyType_Ready(&clips_DefclassType)) fprintf(stderr, "Type: clips_DefclassType\n");
+
+    return
+    + PyType_Ready(&clips_EnvType)
+    + PyType_Ready(&clips_DeftemplType)
+    + PyType_Ready(&clips_FactType)
+    + PyType_Ready(&clips_DefmoduleType)
+    + PyType_Ready(&clips_DeffactsType)
+    + PyType_Ready(&clips_ActivationType)
+    + PyType_Ready(&clips_DefglobalType)
+    + PyType_Ready(&clips_DeffunctionType)
+    + PyType_Ready(&clips_DefgenericType)
+    + PyType_Ready(&clips_DefmethodType)
+    + PyType_Ready(&clips_DefclassType);
+}
+
+
+
 /* initialization function */
 // PYFUNC
 PyMODINIT_FUNC
@@ -19526,9 +19579,11 @@ PyInit_mclips3(void) {
 #endif /* USE_NONASSERT_CLIPSGCLOCK */
 
     Py_Initialize();
+    if(IntializeTypes())return NULL;
 
-    // PREPARE_DEALLOC_ENV();
+    PREPARE_DEALLOC_ENV();
 
+    /* give the module a method map */
 
     // m = Py_InitModule3("mclips3", g_methods, clips__doc__);
     static struct PyModuleDef mdef = {
@@ -19539,12 +19594,10 @@ PyInit_mclips3(void) {
         g_methods,
     };
     if(!(m = PyModule_Create(&mdef))) return NULL;
-
-    /* give the module a method map */
     if(!(d = PyModule_GetDict(m))) return NULL;
 
     /* possibly install the environment deallocator */
-    // INSTALL_DEALLOC_ENV(m);
+    INSTALL_DEALLOC_ENV(m);
 
     /* set the item version string */
     PyDict_SetItemString(d, "__revision__",
@@ -19569,7 +19622,6 @@ PyInit_mclips3(void) {
         return NULL;
     }
     PyDict_SetItemString(d, "ClipsMemoryError", PyExc_ClipsMemoryError);
-    return m;
 
     /* setup ob_type for types defined here */
     Py_TYPE(&clips_EnvType)         = &PyType_Type;
