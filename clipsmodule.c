@@ -138,48 +138,48 @@ static char _error_router_nostream[] = "R02: logical buffer not found";
 static char _error_router_readonly[] = "R03: buffer is read-only";
 
 /* common helpers for common exceptions */
-#define ERROR_CLIPS(s) PyErr_SetString(PyExc_ClipsError, (s))
-#define ERROR_CLIPS_MEMORY(s) PyErr_SetString(PyExc_ClipsMemoryError, (s))
-#define ERROR_VALUE(s) PyErr_SetString(PyExc_ValueError, (s))
-#define ERROR_TYPE(s) PyErr_SetString(PyExc_TypeError, (s))
-#define ERROR_IO(s) PyErr_SetString(PyExc_IOError, (s))
-#define ERROR_MEMORY(s) PyErr_SetString(PyExc_MemoryError, (s))
+#define ERROR_CLIPS(s)           PyErr_SetString(PyExc_ClipsError, (s))
+#define ERROR_CLIPS_MEMORY(s)    PyErr_SetString(PyExc_ClipsMemoryError, (s))
+#define ERROR_VALUE(s)           PyErr_SetString(PyExc_ValueError, (s))
+#define ERROR_TYPE(s)            PyErr_SetString(PyExc_TypeError, (s))
+#define ERROR_IO(s)              PyErr_SetString(PyExc_IOError, (s))
+#define ERROR_MEMORY(s)          PyErr_SetString(PyExc_MemoryError, (s))
 
-#define ERROR_MEMORY_CREATION() ERROR_MEMORY(_error_object_creation)
-#define ERROR_UNIMPLEMENTED() ERROR_CLIPS(_error_clips_unimplemented)
+#define ERROR_MEMORY_CREATION()  ERROR_MEMORY(_error_object_creation)
+#define ERROR_UNIMPLEMENTED()    ERROR_CLIPS(_error_clips_unimplemented)
 #define ERROR_CLIPS_IMPOSSIBLE() ERROR_CLIPS(_error_clips_impossible)
-#define ERROR_CLIPS_GENERIC() ERROR_CLIPS(_error_clips_generic)
-#define ERROR_CLIPS_CREATION() ERROR_CLIPS(_error_clips_creation)
-#define ERROR_CLIPS_NOTFOUND() ERROR_CLIPS(_error_clips_notfound)
-#define ERROR_CLIPS_READONLY() ERROR_CLIPS(_error_clips_readonly)
-#define ERROR_CLIPS_IO() ERROR_IO(_error_clips_fileio)
-#define ERROR_CLIPS_NOENV() ERROR_CLIPS(_error_clips_noenv)
-#define ERROR_CLIPS_RETVAL() ERROR_CLIPS(_error_clips_retval)
-#define ERROR_CLIPS_PARSEF() ERROR_CLIPS(_error_clips_parsefile)
-#define ERROR_CLIPS_PARSEX() ERROR_CLIPS(_error_clips_parseexpr)
-#define ERROR_CLIPS_PARSEA() ERROR_CLIPS(_error_clips_parsearg)
-#define ERROR_CLIPS_EVALX() ERROR_CLIPS(_error_clips_evalexpr)
-#define ERROR_CLIPS_REMOVE() ERROR_CLIPS(_error_clips_remove)
-#define ERROR_CLIPS_ASSERT() ERROR_CLIPS(_error_clips_assert)
-#define ERROR_CLIPS_FUNCCALL() ERROR_CLIPS(_error_clips_funccall)
-#define ERROR_CLIPS_REASSERT() ERROR_CLIPS(_error_clips_reassert)
-#define ERROR_CLIPS_OTHER(s) ERROR_CLIPS("C90: " s)
+#define ERROR_CLIPS_GENERIC()    ERROR_CLIPS(_error_clips_generic)
+#define ERROR_CLIPS_CREATION()   ERROR_CLIPS(_error_clips_creation)
+#define ERROR_CLIPS_NOTFOUND()   ERROR_CLIPS(_error_clips_notfound)
+#define ERROR_CLIPS_READONLY()   ERROR_CLIPS(_error_clips_readonly)
+#define ERROR_CLIPS_IO()         ERROR_IO(_error_clips_fileio)
+#define ERROR_CLIPS_NOENV()      ERROR_CLIPS(_error_clips_noenv)
+#define ERROR_CLIPS_RETVAL()     ERROR_CLIPS(_error_clips_retval)
+#define ERROR_CLIPS_PARSEF()     ERROR_CLIPS(_error_clips_parsefile)
+#define ERROR_CLIPS_PARSEX()     ERROR_CLIPS(_error_clips_parseexpr)
+#define ERROR_CLIPS_PARSEA()     ERROR_CLIPS(_error_clips_parsearg)
+#define ERROR_CLIPS_EVALX()      ERROR_CLIPS(_error_clips_evalexpr)
+#define ERROR_CLIPS_REMOVE()     ERROR_CLIPS(_error_clips_remove)
+#define ERROR_CLIPS_ASSERT()     ERROR_CLIPS(_error_clips_assert)
+#define ERROR_CLIPS_FUNCCALL()   ERROR_CLIPS(_error_clips_funccall)
+#define ERROR_CLIPS_REASSERT()   ERROR_CLIPS(_error_clips_reassert)
+#define ERROR_CLIPS_OTHER(s)     ERROR_CLIPS("C90: " s)
 
-#define ERROR_CLIPSSYS_GENERIC() ERROR_CLIPS(_error_clipssys_generic)
-#define ERROR_CLIPSSYS_GARBFACT() ERROR_CLIPS(_error_clipssys_garbfact)
+#define ERROR_CLIPSSYS_GENERIC()      ERROR_CLIPS(_error_clipssys_generic)
+#define ERROR_CLIPSSYS_GARBFACT()     ERROR_CLIPS(_error_clipssys_garbfact)
 #define ERROR_CLIPSSYS_GARBINSTANCE() ERROR_CLIPS(_error_clipssys_garbinstance)
-#define ERROR_CLIPSSYS_ENVUNINIT() ERROR_CLIPS(_error_clipssys_envuninit)
-#define ERROR_CLIPSSYS_ENVNOCLEAR() ERROR_CLIPS(_error_clipssys_envnoclear)
-#define ERROR_CLIPSSYS_BADENV() ERROR_CLIPS(_error_clipssys_badenv)
-#define ERROR_CLIPSSYS_CURENV() ERROR_CLIPS(_error_clipssys_curenv)
-#define ERROR_CLIPSSYS_MAXENV() ERROR_CLIPS(_error_clipssys_maxenv)
-#define ERROR_CLIPSSYS_CLEANUP() ERROR_CLIPS(_error_clipssys_cleanup)
+#define ERROR_CLIPSSYS_ENVUNINIT()    ERROR_CLIPS(_error_clipssys_envuninit)
+#define ERROR_CLIPSSYS_ENVNOCLEAR()   ERROR_CLIPS(_error_clipssys_envnoclear)
+#define ERROR_CLIPSSYS_BADENV()       ERROR_CLIPS(_error_clipssys_badenv)
+#define ERROR_CLIPSSYS_CURENV()       ERROR_CLIPS(_error_clipssys_curenv)
+#define ERROR_CLIPSSYS_MAXENV()       ERROR_CLIPS(_error_clipssys_maxenv)
+#define ERROR_CLIPSSYS_CLEANUP()      ERROR_CLIPS(_error_clipssys_cleanup)
 
-#define ERROR_CLIPSMEM_OUT() ERROR_CLIPS_MEMORY(_error_clipsmem_out)
+#define ERROR_CLIPSMEM_OUT()          ERROR_CLIPS_MEMORY(_error_clipsmem_out)
 
-#define ERROR_ROUTER_INVALID() ERROR_CLIPS(_error_router_invalid)
-#define ERROR_ROUTER_NOSTREAM() ERROR_CLIPS(_error_router_nostream)
-#define ERROR_ROUTER_READONLY() ERROR_CLIPS(_error_router_readonly)
+#define ERROR_ROUTER_INVALID()        ERROR_CLIPS(_error_router_invalid)
+#define ERROR_ROUTER_NOSTREAM()       ERROR_CLIPS(_error_router_nostream)
+#define ERROR_ROUTER_READONLY()       ERROR_CLIPS(_error_router_readonly)
 
 
 /* unimplemented function builder */
@@ -820,6 +820,7 @@ F_INLINE void clips_unlock_gc(clips_EnvObject *pyenv) {
         }
     }
 }
+
 F_INLINE BOOL add_FactObject_lock(clips_EnvObject *pyenv) {
     if(pyenv)
         pyenv->clips_NotAssertedFacts++;
@@ -827,6 +828,7 @@ F_INLINE BOOL add_FactObject_lock(clips_EnvObject *pyenv) {
         clips_NotAssertedFacts++;
     return TRUE;
 }
+
 F_INLINE BOOL remove_FactObject_lock(clips_EnvObject *pyenv) {
     if(pyenv) {
         if(pyenv->clips_NotAssertedFacts > 0) {
@@ -972,7 +974,7 @@ F_INLINE BOOL reset_FactObject_lock(clips_EnvObject *pyenv) {
 static void clips_FactObject_dealloc(PyObject *self) {
     void *p = clips_fact_value(self);
 #ifdef USE_NONASSERT_CLIPSGCLOCK
-    LOPTR_ITEM ***hm = 
+    LOPTR_ITEM ***hm =
         (LOPTR_ITEM ***)GetEnvironmentData(
             clips_fact_env(self), STRAYFACTS_DATA);
     SPEC_REMOVE_HASH_FACT(*hm, self);
@@ -2311,12 +2313,12 @@ END_FAIL
 
 /* helper to check whether there is still this deftemplate */
 F_INLINE void *deftemplateExists(void *ptr) {
-	void *rv = GetNextDeftemplate(NULL);
-	while(rv != NULL) {
-		if(rv == ptr) return rv;
-		else rv = GetNextDeftemplate(rv);
-	}
-	return NULL;
+    void *rv = GetNextDeftemplate(NULL);
+    while(rv != NULL) {
+        if(rv == ptr) return rv;
+        else rv = GetNextDeftemplate(rv);
+    }
+    return NULL;
 }
 #define PYDEFTEMPLATE_EXISTS(_p) deftemplateExists(clips_deftemplate_value(_p))
 #define CHECK_DEFTEMPLATE(_p) do { \
@@ -3654,12 +3656,12 @@ END_FAIL
 
 /* helper to check whether there is still this construct */
 F_INLINE void *deffactsExists(void *ptr) {
-	void *rv = GetNextDeffacts(NULL);
-	while(rv != NULL) {
-		if(rv == ptr) return rv;
-		else rv = GetNextDeffacts(rv);
-	}
-	return NULL;
+    void *rv = GetNextDeffacts(NULL);
+    while(rv != NULL) {
+        if(rv == ptr) return rv;
+        else rv = GetNextDeffacts(rv);
+    }
+    return NULL;
 }
 #define PYDEFFACTS_EXISTS(_p) deffactsExists(clips_deffacts_value(_p))
 #define CHECK_DEFFACTS(_p) do { \
@@ -18910,6 +18912,7 @@ static PyTypeObject guard_Type = {
         Py_INCREF(&guard_Type); \
         PyModule_AddObject(_m, "__PyCLIPS_$iGuardObject__", (PyObject *)&guard_Type); \
     } while(0)
+
 
 #else
 
