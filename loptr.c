@@ -73,7 +73,7 @@ typedef LOPTR_BOOL(*LOPTR_FUNC)(void *);
 /* functions to transparently manage the list */
 
 /* find an element */
-static LOPTR_INLINE LOPTR_ITEM *LOPTR_find(LOPTR_ITEM **t, void *elem) {
+LOPTR_INLINE LOPTR_ITEM *LOPTR_find(LOPTR_ITEM **t, void *elem) {
     LOPTR_REGISTER LOPTR_ITEM *p = t[LOPTR_HASH(elem)];
     
     while(p) {
@@ -86,7 +86,7 @@ static LOPTR_INLINE LOPTR_ITEM *LOPTR_find(LOPTR_ITEM **t, void *elem) {
 }
 
 /* find the last item in the hash table for element */
-static LOPTR_INLINE LOPTR_ITEM *LOPTR_lastitem(LOPTR_ITEM **t, void *elem) {
+LOPTR_INLINE LOPTR_ITEM *LOPTR_lastitem(LOPTR_ITEM **t, void *elem) {
     LOPTR_REGISTER LOPTR_ITEM *p = t[LOPTR_HASH(elem)];
     
     if(p) {
@@ -98,7 +98,7 @@ static LOPTR_INLINE LOPTR_ITEM *LOPTR_lastitem(LOPTR_ITEM **t, void *elem) {
 }
 
 /* append an element in the hash table */
-static LOPTR_INLINE LOPTR_BOOL LOPTR_append(LOPTR_ITEM **t, void *elem) {
+LOPTR_INLINE LOPTR_BOOL LOPTR_append(LOPTR_ITEM **t, void *elem) {
     LOPTR_ITEM *p = NULL, *q = NULL;
     
     if(LOPTR_find(t, elem))
@@ -117,7 +117,7 @@ static LOPTR_INLINE LOPTR_BOOL LOPTR_append(LOPTR_ITEM **t, void *elem) {
 }
 
 /* remove an element from the hash table */
-static LOPTR_INLINE LOPTR_BOOL LOPTR_remove(LOPTR_ITEM **t, void *elem) {
+LOPTR_INLINE LOPTR_BOOL LOPTR_remove(LOPTR_ITEM **t, void *elem) {
     int h = LOPTR_HASH(elem);
     LOPTR_REGISTER LOPTR_ITEM *p = t[h];
     LOPTR_ITEM *q = NULL;
@@ -143,7 +143,7 @@ static LOPTR_INLINE LOPTR_BOOL LOPTR_remove(LOPTR_ITEM **t, void *elem) {
 }
 
 /* apply a bool-returning function to list elements ignoring result */
-static LOPTR_INLINE void LOPTR_apply(LOPTR_ITEM **t, LOPTR_FUNC f) {
+LOPTR_INLINE void LOPTR_apply(LOPTR_ITEM **t, LOPTR_FUNC f) {
     int i = 0;
     LOPTR_REGISTER LOPTR_ITEM *p = NULL;
     
@@ -157,7 +157,7 @@ static LOPTR_INLINE void LOPTR_apply(LOPTR_ITEM **t, LOPTR_FUNC f) {
 }
 
 /* apply a bool-returning function to list elements returning failing result */
-static LOPTR_INLINE void *LOPTR_test_apply(LOPTR_ITEM **t, LOPTR_FUNC f) {
+LOPTR_INLINE void *LOPTR_test_apply(LOPTR_ITEM **t, LOPTR_FUNC f) {
     LOPTR_REGISTER int i = 0;
     LOPTR_REGISTER LOPTR_ITEM *p = NULL;
     
@@ -173,7 +173,7 @@ static LOPTR_INLINE void *LOPTR_test_apply(LOPTR_ITEM **t, LOPTR_FUNC f) {
 }
 
 /* reset a hash table (only leave the array) removing all possible lists */
-static LOPTR_INLINE void LOPTR_reset_hash_table(LOPTR_ITEM **t) {
+LOPTR_INLINE void LOPTR_reset_hash_table(LOPTR_ITEM **t) {
     LOPTR_REGISTER int i = 0;
     LOPTR_REGISTER LOPTR_ITEM *p = NULL;
     LOPTR_ITEM *q = NULL;

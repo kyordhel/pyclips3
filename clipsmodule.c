@@ -90,7 +90,7 @@ static PyDictObject *clips_PythonFunctions = NULL;
 
 /* inlining might be useful in some cases */
 #ifdef __GNUC__
-#define F_INLINE __inline__
+#define F_INLINE static __inline__
 #else
 #ifdef _MSC_VER
 #define F_INLINE __inline
@@ -19583,8 +19583,6 @@ PyInit_mclips3(void) {
 
     PREPARE_DEALLOC_ENV();
 
-    /* give the module a method map */
-
     // m = Py_InitModule3("mclips3", g_methods, clips__doc__);
     static struct PyModuleDef mdef = {
         PyModuleDef_HEAD_INIT,
@@ -19594,6 +19592,8 @@ PyInit_mclips3(void) {
         g_methods,
     };
     if(!(m = PyModule_Create(&mdef))) return NULL;
+
+    /* give the module a method map */
     if(!(d = PyModule_GetDict(m))) return NULL;
 
     /* possibly install the environment deallocator */
