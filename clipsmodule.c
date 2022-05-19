@@ -18124,12 +18124,16 @@ static PyTypeObject buffer_Type = {
 /* allocate a named initial buffer with size 0 */
 static buffer_Object *buffer_create(const char *name, BOOL readonly) {
     buffer_Object *p = PyObject_New(buffer_Object, &buffer_Type);
-    size_t namelen = strlen(name);
-
-    buffer_Name(p) = NEW_ARRAY(char, namelen + 1);
     if(!p)
         return NULL;
+
+    size_t namelen = strlen(name);
+    buffer_Name(p) = NEW_ARRAY(char, namelen + 1);
+
+#pragma GCC diagnostic push // Get rid of strncat due to function being static
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
     strncpy(buffer_Name(p), name, namelen);
+#pragma GCC diagnostic pop
     buffer_Name(p)[namelen] = '\0';
     buffer_Size(p) = 0;
     buffer_Buffer(p) = NULL;
@@ -18173,7 +18177,13 @@ static BOOL buffer_append(buffer_Object *o, const char *str) {
     if(!usedbuffer && newbuffer)
         newbuffer[0] = '\0';
     if(newbuffer != NULL) {
+#pragma GCC diagnostic push // Get rid of strncat due to function being static
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
         strncat(newbuffer, str, len);
+#pragma GCC diagnostic pop
+        // char* dest = newbuffer + buffer_Size(o) -1;
+        // memcpy(dest, str, len);
+        // dest[len] = 0;
         buffer_Size(o) += len;
         newbuffer[buffer_Size(o)] = '\0';
         if(!buffer_Readptr(o))
