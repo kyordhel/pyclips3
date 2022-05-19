@@ -67,7 +67,7 @@ static PyDictObject *clips_PythonFunctions = NULL;
 
 /* to add manifest integer constants to module dictionary */
 #define ADD_MANIFEST_CONSTANT(dict, name) \
-    PyDict_SetItemString((dict), #name, PyInt_FromLong((long)(name)))
+    PyDict_SetItemString((dict), #name, PyLong_FromLong((long)(name)))
 
 /* I always define this */
 #define SKIP()
@@ -1683,8 +1683,8 @@ END_FAIL
  */
 #define IS_PY_DATA_OBJECT(_p) \
     (PyTuple_Check(_p) && PyTuple_Size(_p) == 2 \
-     && PyInt_Check(PyTuple_GetItem(_p, 0)))
-#define PY_DATA_OBJECT_TYPE(_p) ((int)PyInt_AsLong(PyTuple_GetItem(_p, 0)))
+     && PyLong_Check(PyTuple_GetItem(_p, 0)))
+#define PY_DATA_OBJECT_TYPE(_p) ((int)PyLong_AsLong(PyTuple_GetItem(_p, 0)))
 #define PY_DATA_OBJECT_VALUE(_p) ((PyObject *)PyTuple_GetItem(_p, 1))
 /* then the actual functions to put data in the DATA_OBJECT structure */
 BOOL i_py2do_mfhelp_e(void *env, PyObject *p, void *mfptr, int fieldpos) {
@@ -1700,9 +1700,9 @@ BOOL i_py2do_mfhelp_e(void *env, PyObject *p, void *mfptr, int fieldpos) {
     value = PY_DATA_OBJECT_VALUE(p);
     switch(type) {
     case INTEGER:
-        if(!PyInt_Check(value))
+        if(!PyLong_Check(value))
             goto fail;
-        i = PyInt_AsLong(value);
+        i = PyLong_AsLong(value);
         do_value = EnvAddLong(env, i);
         break;
     case FLOAT:
@@ -1714,9 +1714,9 @@ BOOL i_py2do_mfhelp_e(void *env, PyObject *p, void *mfptr, int fieldpos) {
     case STRING:
     case SYMBOL:
     case INSTANCE_NAME:
-        if(!PyString_Check(value))
+        if(!PyUnicode_Check(value))
             goto fail;
-        s = PyString_AsString(value);
+        s = (char*)PyUnicode_AsUTF8(value);
         do_value = EnvAddSymbol(env, s);
         break;
     case INSTANCE_ADDRESS:
@@ -1760,9 +1760,9 @@ BOOL i_py2do_e(void *env, PyObject *p, DATA_OBJECT *o) {
     value = PY_DATA_OBJECT_VALUE(p);
     switch(type) {
     case INTEGER:
-        if(!PyInt_Check(value))
+        if(!PyLong_Check(value))
             goto fail;
-        i = PyInt_AsLong(value);
+        i = PyLong_AsLong(value);
         do_value = EnvAddLong(env, i);
         break;
     case FLOAT:
@@ -1774,9 +1774,9 @@ BOOL i_py2do_e(void *env, PyObject *p, DATA_OBJECT *o) {
     case STRING:
     case SYMBOL:
     case INSTANCE_NAME:
-        if(!PyString_Check(value))
+        if(!PyUnicode_Check(value))
             goto fail;
-        s = PyString_AsString(value);
+        s = (char*)PyUnicode_AsUTF8(value);
         do_value = EnvAddSymbol(env, s);
         break;
     case MULTIFIELD:
@@ -18844,29 +18844,37 @@ static void guard_dealloc(PyObject *o) {
 
 /* the Python internal guard Type */
 static PyTypeObject guard_Type = {
-    PyObject_HEAD_INIT(NULL)
-    0,
+    PyVarObject_HEAD_INIT(NULL, 0)
     "__PyCLIPS_$iGuardType__",  /* the name is intentionally unusable */
-    sizeof(guard_Object),
-    0,
-    guard_dealloc, /*tp_dealloc*/
-    0,          /*tp_print*/
-    0,          /*tp_getattr*/
-    0,          /*tp_setattr*/
-    0,          /*tp_compare*/
-    0,          /*tp_repr*/
-    0,          /*tp_as_number*/
-    0,          /*tp_as_sequence*/
-    0,          /*tp_as_mapping*/
-    0,          /*tp_hash */
+    sizeof(guard_Object),       /* tp_basicsize */
+    0,                          /* tp_itemsize */
+    guard_dealloc,              /*tp_dealloc*/
+    0,                          /*tp_print*/
+    0,                          /*tp_getattr*/
+    0,                          /*tp_setattr*/
+    0,                          /* tp_reserved */
+    0,                          /* tp_repr */
+    0,                          /* tp_as_number */
+    0,                          /* tp_as_sequence */
+    0,                          /* tp_as_mapping */
+    0,                          /* tp_hash  */
+    0,                          /* tp_call */
+    0,                          /* tp_str */
+    0,                          /* tp_getattro */
+    0,                          /* tp_setattro */
+    0,                          /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,         /* tp_flags */
+    "PyCLIPS guard type ",      /* tp_doc */
 };
 
 /* also prepare an object living in module namespace with an unusable name */
-#define PREPARE_DEALLOC_ENV() guard_Object *_ig = NULL;
+#define PREPARE_DEALLOC_ENV()
+// #define PREPARE_DEALLOC_ENV() guard_Object *_ig = NULL;
 #define INSTALL_DEALLOC_ENV(_m) do { \
-        Py_TYPE(&guard_Type) = &PyType_Type; \
-        _ig = PyObject_New(guard_Object, &guard_Type); \
-        PyModule_AddObject(_m, "__PyCLIPS_$iGuardObject__", (PyObject *)_ig); \
+        guard_Type.tp_new = PyType_GenericNew; \
+        if (PyType_Ready(&guard_Type) < 0) return NULL; \
+        Py_INCREF(&guard_Type); \
+        PyModule_AddObject(_m, "__PyCLIPS_$iGuardObject__", (PyObject *)&guard_Type); \
     } while(0)
 
 #else
@@ -19508,7 +19516,7 @@ static PyMethodDef g_methods[] = {
 
 
 /* initialization function */
-PYFUNC
+// PYFUNC
 PyMODINIT_FUNC
 PyInit_mclips3(void) {
     PyObject *m = NULL, *d = NULL;
@@ -19516,26 +19524,52 @@ PyInit_mclips3(void) {
     void *e = NULL;
     LOPTR_ITEM ***hm = NULL;
 #endif /* USE_NONASSERT_CLIPSGCLOCK */
-    PREPARE_DEALLOC_ENV();
+
+    Py_Initialize();
+
+    // PREPARE_DEALLOC_ENV();
+
+
+    // m = Py_InitModule3("mclips3", g_methods, clips__doc__);
+    static struct PyModuleDef mdef = {
+        PyModuleDef_HEAD_INIT,
+        "mclips3",
+        clips__doc__,
+        -1,
+        g_methods,
+    };
+    if(!(m = PyModule_Create(&mdef))) return NULL;
 
     /* give the module a method map */
-    m = Py_InitModule3("mclips3", g_methods, clips__doc__);
-    d = PyModule_GetDict(m);
+    if(!(d = PyModule_GetDict(m))) return NULL;
 
     /* possibly install the environment deallocator */
-    INSTALL_DEALLOC_ENV(m);
+    // INSTALL_DEALLOC_ENV(m);
 
     /* set the item version string */
     PyDict_SetItemString(d, "__revision__",
-                         PyString_FromString(clips__revision__));
+                         PyUnicode_FromString(clips__revision__));
 
     /* build the actual exception objects */
     PyExc_ClipsError = PyErr_NewException("mclips3.ClipsError", NULL, NULL);
+    if (PyModule_AddObject(m, "ClipsError", PyExc_ClipsError) < 0) {
+        Py_XDECREF(PyExc_ClipsError);
+        Py_CLEAR(PyExc_ClipsError);
+        Py_DECREF(m);
+        return NULL;
+    }
     PyDict_SetItemString(d, "ClipsError", PyExc_ClipsError);
-    
-    PyExc_ClipsMemoryError = PyErr_NewException(
-        "mclips3.ClipsMemoryError", NULL, NULL);
+
+    PyExc_ClipsMemoryError = PyErr_NewException("mclips3.ClipsMemoryError", NULL, NULL);
+
+    if (PyModule_AddObject(m, "ClipsMemoryError", PyExc_ClipsMemoryError) < 0) {
+        Py_XDECREF(PyExc_ClipsMemoryError);
+        Py_CLEAR(PyExc_ClipsMemoryError);
+        Py_DECREF(m);
+        return NULL;
+    }
     PyDict_SetItemString(d, "ClipsMemoryError", PyExc_ClipsMemoryError);
+    return m;
 
     /* setup ob_type for types defined here */
     Py_TYPE(&clips_EnvType)         = &PyType_Type;
@@ -19644,6 +19678,12 @@ PyInit_mclips3(void) {
               clips_exitFunction);
     ActivateRouter("python");
 
+    printf("module Initialized!\n");
+    // if (PyErr_Occurred()){
+    //     Py_FatalError("Can't initialize mclips3 module");
+    //     return NULL;
+    // }
+    return m;
 }
 
 
