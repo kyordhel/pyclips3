@@ -301,7 +301,7 @@ import os as  _os
 import types as _types
 
 # the low-level module
-import _clips as _c
+import mclips3 as _c
 
 
 # ========================================================================== #
@@ -312,7 +312,7 @@ ClipsError = _c.ClipsError
 
 
 # redeclare manifest constants here in order to avoid having to
-#  reference the ones defined in te low-level module _clips
+#  reference the ones defined in te low-level module mclips3
 
 # check Python version, and issue an exception if not supported
 if _sys.version[:3] < "2.4":
@@ -938,9 +938,9 @@ setup(name="pyclips",
       url="http://pyclips.sourceforge.net",
       packages=['clips'],
       ext_modules=[
-          Extension('clips._clips',
+          Extension('clips.mclips3',
                     main_clipssrc + all_clipssrc,
-                    extra_compile_args=CFLAGS,
+                    extra_compile_args=CFLAGS + [ "-pedantic", "-Wno-missing-braces" ],
                     include_dirs=[ClipsLIB_dir]),
           ],
      )

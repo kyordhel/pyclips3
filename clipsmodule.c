@@ -37,7 +37,7 @@
 
 /* the module documentation string, in perfect Python style */
 static char clips__doc__[] =
-"_clips - a low-level portable interface to the CLIPS system for Python\n"
+"mclips3 - a low-level portable interface to the CLIPS system for Python\n"
 "         (c) 2002-2008 Francesco Garosi/JKS";
 
 /* the release string, in case it should be used someday */
@@ -659,7 +659,7 @@ static void clips_EnvObject_dealloc(PyObject *self) {
 static PyTypeObject clips_EnvType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "environment",
+    "mclips3.environment",
     sizeof(clips_EnvObject),
     0,
     clips_EnvObject_dealloc, /*tp_dealloc*/
@@ -696,7 +696,7 @@ static void clips_DeftemplObject_dealloc(PyObject *self) {
 static PyTypeObject clips_DeftemplType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "deftemplate",
+    "mclips3.deftemplate",
     sizeof(clips_DeftemplObject),
     0,
     clips_DeftemplObject_dealloc, /*tp_dealloc*/
@@ -981,7 +981,7 @@ static void clips_FactObject_dealloc(PyObject *self) {
 static PyTypeObject clips_FactType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "fact",
+    "mclips3.fact",
     sizeof(clips_FactObject),
     0,
     clips_FactObject_dealloc, /*tp_dealloc*/
@@ -1022,7 +1022,7 @@ static void clips_AddressObject_dealloc(PyObject *self) {
 static PyTypeObject clips_AddressType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "address",
+    "mclips3.address",
     sizeof(clips_AddressObject),
     0,
     clips_AddressObject_dealloc, /*tp_dealloc*/
@@ -1059,7 +1059,7 @@ static void clips_DeffactsObject_dealloc(PyObject *self) {
 static PyTypeObject clips_DeffactsType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "deffacts",
+    "mclips3.deffacts",
     sizeof(clips_DeffactsObject),
     0,
     clips_DeffactsObject_dealloc, /*tp_dealloc*/
@@ -1096,7 +1096,7 @@ static void clips_DefruleObject_dealloc(PyObject *self) {
 static PyTypeObject clips_DefruleType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "defrule",
+    "mclips3.defrule",
     sizeof(clips_DefruleObject),
     0,
     clips_DefruleObject_dealloc, /*tp_dealloc*/
@@ -1133,7 +1133,7 @@ static void clips_ActivationObject_dealloc(PyObject *self) {
 static PyTypeObject clips_ActivationType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "activation",
+    "mclips3.activation",
     sizeof(clips_ActivationObject),
     0,
     clips_ActivationObject_dealloc, /*tp_dealloc*/
@@ -1170,7 +1170,7 @@ static void clips_DefglobalObject_dealloc(PyObject *self) {
 static PyTypeObject clips_DefglobalType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "defglobal",
+    "mclips3.defglobal",
     sizeof(clips_DefglobalObject),
     0,
     clips_DefglobalObject_dealloc, /*tp_dealloc*/
@@ -1207,7 +1207,7 @@ static void clips_DeffunctionObject_dealloc(PyObject *self) {
 static PyTypeObject clips_DeffunctionType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "deffunction",
+    "mclips3.deffunction",
     sizeof(clips_DeffunctionObject),
     0,
     clips_DeffunctionObject_dealloc, /*tp_dealloc*/
@@ -1244,7 +1244,7 @@ static void clips_DefgenericObject_dealloc(PyObject *self) {
 static PyTypeObject clips_DefgenericType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "defgeneric",
+    "mclips3.defgeneric",
     sizeof(clips_DefgenericObject),
     0,
     clips_DefgenericObject_dealloc, /*tp_dealloc*/
@@ -1281,7 +1281,7 @@ static void clips_DefmethodObject_dealloc(PyObject *self) {
 static PyTypeObject clips_DefmethodType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "defmethod",
+    "mclips3.defmethod",
     sizeof(clips_DefmethodObject),
     0,
     clips_DefmethodObject_dealloc, /*tp_dealloc*/
@@ -1318,7 +1318,7 @@ static void clips_DefclassObject_dealloc(PyObject *self) {
 static PyTypeObject clips_DefclassType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "defclass",
+    "mclips3.defclass",
     sizeof(clips_DefclassObject),
     0,
     clips_DefclassObject_dealloc, /*tp_dealloc*/
@@ -1383,7 +1383,7 @@ static void clips_InstanceObject_dealloc(PyObject *self) {
 static PyTypeObject clips_InstanceType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "instance",
+    "mclips3.instance",
     sizeof(clips_InstanceObject),
     0,
     clips_InstanceObject_dealloc, /*tp_dealloc*/
@@ -1420,7 +1420,7 @@ static void clips_DefinstancesObject_dealloc(PyObject *self) {
 static PyTypeObject clips_DefinstancesType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "definstances",
+    "mclips3.definstances",
     sizeof(clips_DefinstancesObject),
     0,
     clips_DefinstancesObject_dealloc, /*tp_dealloc*/
@@ -1457,7 +1457,7 @@ static void clips_DefmoduleObject_dealloc(PyObject *self) {
 static PyTypeObject clips_DefmoduleType = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "defmodule",
+    "mclips3.defmodule",
     sizeof(clips_DefmoduleObject),
     0,
     clips_DefmoduleObject_dealloc, /*tp_dealloc*/
@@ -18224,7 +18224,7 @@ static int buffer_ungetchar(buffer_Object *o, int c) {
 static PyTypeObject buffer_Type = {
     PyObject_HEAD_INIT(NULL)
     0,
-    "streambuffer",
+    "mclips3.buffer_Object",
     sizeof(buffer_Object),
     0,
     buffer_dealloc, /*tp_dealloc*/
@@ -19510,7 +19510,7 @@ static PyMethodDef g_methods[] = {
 /* initialization function */
 PYFUNC
 PyMODINIT_FUNC
-init_clips(void) {
+PyInit_mclips3(void) {
     PyObject *m = NULL, *d = NULL;
 #ifdef USE_NONASSERT_CLIPSGCLOCK
     void *e = NULL;
@@ -19519,7 +19519,7 @@ init_clips(void) {
     PREPARE_DEALLOC_ENV();
 
     /* give the module a method map */
-    m = Py_InitModule3("_clips", g_methods, clips__doc__);
+    m = Py_InitModule3("mclips3", g_methods, clips__doc__);
     d = PyModule_GetDict(m);
 
     /* possibly install the environment deallocator */
@@ -19530,11 +19530,11 @@ init_clips(void) {
                          PyString_FromString(clips__revision__));
 
     /* build the actual exception objects */
-    PyExc_ClipsError = PyErr_NewException("_clips.ClipsError", NULL, NULL);
+    PyExc_ClipsError = PyErr_NewException("mclips3.ClipsError", NULL, NULL);
     PyDict_SetItemString(d, "ClipsError", PyExc_ClipsError);
     
     PyExc_ClipsMemoryError = PyErr_NewException(
-        "_clips.ClipsMemoryError", NULL, NULL);
+        "mclips3.ClipsMemoryError", NULL, NULL);
     PyDict_SetItemString(d, "ClipsMemoryError", PyExc_ClipsMemoryError);
 
     /* setup ob_type for types defined here */
