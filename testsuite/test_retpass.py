@@ -13,7 +13,7 @@ class ctc_RetPass(ctestcase):
 
     def ctf_PassFacts_01(self):
         """Testing: Fact objects as arguments"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -25,7 +25,7 @@ class ctc_RetPass(ctestcase):
 
     def ctf_PassInstances_01(self):
         """Testing: Instance objects as arguments"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -39,7 +39,7 @@ class ctc_RetPass(ctestcase):
 
     def ctf_RetFacts_01(self):
         """Testing: Fact objects as return values"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -56,7 +56,7 @@ class ctc_RetPass(ctestcase):
 
     def ctf_RetInstances_01(self):
         """Testing: Instance objects as return values"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()

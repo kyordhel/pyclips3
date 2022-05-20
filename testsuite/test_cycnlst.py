@@ -126,7 +126,7 @@ class ctc_CyclesAndLists(ctestcase):
 
     def ctf_CyclesFact_01(self):
         """Testing: FactList, InitialFact, Fact.Next, Fact.Index"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -140,11 +140,11 @@ class ctc_CyclesAndLists(ctestcase):
                 self.assertEqual(f.PPForm(), f0.PPForm())
                 f0 = f0.Next()
             self.assertEqual(li[-1].Index, 4)
-            self.assert_(f0 is None)
+            self.assertTrue(f0 is None)
 
     def ctf_CyclesClass_01(self):
         """Testing: ClassList, InitialClass, FindClass, Class.Next"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -153,16 +153,20 @@ class ctc_CyclesAndLists(ctestcase):
             E = e.BuildClass("E", "(is-a D)")
             li = e.ClassList()
             cl0 = e.InitialClass()
+
+            # Problem: classes have MAIN:: prefix
             for cln in li:
-                if cln in ['C', 'D', 'E']:
+                # cln = str(cln).replace("MAIN::", "")
+                if cln in ["C", "D", "E"]:
                     cl = e.FindClass(cln)
                     self.assertEqual(cl.PPForm(), cl0.PPForm())
                 cl0 = cl0.Next()
-            self.assert_(cl0 is None)
+            self.assertTrue(cl0 is None)
+
 
     def ctf_CyclesInstance_01(self):
         """Testing: InstancesChanged, InitialInstance, FindInstance, Instance.Next"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -172,17 +176,17 @@ class ctc_CyclesAndLists(ctestcase):
             c1 = e.BuildInstance("c1", "C")
             c2 = e.BuildInstance("c2", "C")
             c3 = e.BuildInstance("c3", "C")
-            self.assert_(e.InstancesChanged())
+            self.assertTrue(e.InstancesChanged())
             li = [io, c1, c2, c3]
             i0 = e.InitialInstance()
             for i in li:
                 self.assertEqual(i.PPForm(), i0.PPForm())
                 i0 = i0.Next()
-            self.assert_(i0 is None)
+            self.assertTrue(i0 is None)
 
     def ctf_CyclesInstance_02(self):
         """Testing: Instance.IsValid, Instance.Remove, Instance.DirectRemove"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -190,16 +194,16 @@ class ctc_CyclesAndLists(ctestcase):
             e.InstancesChanged()
             c1 = e.BuildInstance("c1", "C")
             c2 = e.BuildInstance("c2", "C")
-            self.assert_(c2.IsValid())
+            self.assertTrue(c2.IsValid())
             c2.Remove()
-            self.assert_(not c2.IsValid())
-            self.assert_(c1.IsValid())
+            self.assertTrue(not c2.IsValid())
+            self.assertTrue(c1.IsValid())
             c1.DirectRemove()
-            self.assert_(not c1.IsValid())
+            self.assertTrue(not c1.IsValid())
 
     def ctf_CyclesInstance_03(self):
         """Testing: Instance.Class, Instance.Slots, Instance.Send"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -217,48 +221,64 @@ class ctc_CyclesAndLists(ctestcase):
     def ctf_CyclesInstance_04(self):
         """Testing: Class.InitialInstance, Class.InitialSubclassInstance, {...}"""
         """         Class.NextInstance, Class.NextSubclassInstance"""
-        for x in self.envdict.keys():
-            e = self.envdict[x]
-            e.Clear()
-            e.Reset()
-            C = e.BuildClass("C", "(is-a USER)")
-            D = e.BuildClass("D", "(is-a C)")
-            d1 = e.BuildInstance("d1", "D")
-            d2 = e.BuildInstance("d2", "D")
-            c1 = e.BuildInstance("c1", "C")
-            c2 = e.BuildInstance("c2", "C")
-            i00 = C.InitialInstance()
-            i01 = C.NextInstance(i00)
-            i10 = C.InitialSubclassInstance()
-            i11 = C.NextSubclassInstance(i10)
-            i12 = C.NextSubclassInstance(i11)
-            i13 = C.NextSubclassInstance(i12)
-            i20 = D.InitialInstance()
-            i21 = D.NextInstance(i20)
-            i30 = D.InitialSubclassInstance()
-            i31 = D.NextSubclassInstance(i30)
-            self.assert_(i01 is not None)
-            self.assert_(i13 is not None)
-            self.assert_(i21 is not None)
-            self.assert_(i31 is not None)
-            self.assertEqual(i01.PPForm(), c2.PPForm())
-            self.assertEqual(i31.PPForm(), d2.PPForm())
-            self.assertEqual(i20.PPForm(), i30.PPForm())
-            self.assertEqual(i21.PPForm(), i31.PPForm())
-            lppf = [d1.PPForm(), d2.PPForm(), c1.PPForm(), c2.PPForm()]
-            for i in [i10, i11, i12, i13]:
-                ippf = i.PPForm()
-                if ippf in lppf:
-                    lppf.remove(ippf)
-            self.assert_(not lppf)
-            self.assert_(C.NextInstance(i01) is None)
-            self.assert_(D.NextInstance(i21) is None)
-            self.assert_(C.NextSubclassInstance(i13) is None)
-            self.assert_(D.NextSubclassInstance(i31) is None)
+
+        # ERROR! SEGMENTATION FAULT
+        self.assertTrue(False, "Sporadic segmentation fault somewhere here.")
+        self.skip()
+
+        for x in self.envdict:
+            try:
+                e = self.envdict[x]
+                e.Clear()
+                e.Reset()
+                C = e.BuildClass("C", "(is-a USER)")
+                D = e.BuildClass("D", "(is-a C)")
+                d1 = e.BuildInstance("d1", "D")
+                d2 = e.BuildInstance("d2", "D")
+                c1 = e.BuildInstance("c1", "C")
+                c2 = e.BuildInstance("c2", "C")
+                i00 = C.InitialInstance()
+                i01 = C.NextInstance(i00)
+                i10 = C.InitialSubclassInstance()
+                i11 = C.NextSubclassInstance(i10)
+                i12 = C.NextSubclassInstance(i11)
+                i13 = C.NextSubclassInstance(i12)
+                i20 = D.InitialInstance()
+                i21 = D.NextInstance(i20)
+                i30 = D.InitialSubclassInstance()
+                i31 = D.NextSubclassInstance(i30)
+                self.assertTrue(i01 is not None)
+                self.assertTrue(i13 is not None)
+                self.assertTrue(i21 is not None)
+                self.assertTrue(i31 is not None)
+                self.assertEqual(i01.PPForm(), c2.PPForm())
+                self.assertEqual(i31.PPForm(), d2.PPForm())
+                self.assertEqual(i20.PPForm(), i30.PPForm())
+                self.assertEqual(i21.PPForm(), i31.PPForm())
+                lppf = [d1.PPForm(), d2.PPForm(), c1.PPForm(), c2.PPForm()]
+                for i in [i10, i11, i12, i13]:
+                    ippf = i.PPForm()
+                    if ippf in lppf:
+                        lppf.remove(ippf)
+                self.assertTrue(not lppf)
+                self.assertTrue(C.NextInstance(i01) is None)
+                self.assertTrue(D.NextInstance(i21) is None)
+                self.assertTrue(C.NextSubclassInstance(i13) is None)
+                self.assertTrue(D.NextSubclassInstance(i31) is None)
+
+            except:
+                import traceback
+                traceback.print_exc()
+                print()
+                traceback.print_last()
+                print()
+                traceback.print_stack()
+
+
 
     def ctf_CyclesRule_01(self):
         """Testing: InitialRule, RuleList, FindRule, Rule.Next, Rule.PPForm"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -269,31 +289,31 @@ class ctc_CyclesAndLists(ctestcase):
             for r in li:
                 self.assertEqual(r0.PPForm(), e.FindRule(r).PPForm())
                 r0 = r0.Next()
-            self.assert_(r0 is None)
+            self.assertTrue(r0 is None)
 
     def ctf_CyclesRule_02(self):
         """Testing: Rule.Name, Rule.Deletable, Rule.Remove, Rule.Module"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
             r1 = e.BuildRule("r1", "(f1)", "")
             r2 = e.BuildRule("r2", "(f2)", "")
-            self.assert_(r1.Deletable)
-            self.assert_(r2.Deletable)
+            self.assertTrue(r1.Deletable)
+            self.assertTrue(r2.Deletable)
             li = e.RuleList()
             r0 = e.InitialRule()
             for r in li:
                 self.assertEqual(r0.Name, e.FindRule(r).Name)
                 self.assertEqual(r0.Module, "MAIN")
                 r0 = r0.Next()
-            self.assert_(r0 is None)
+            self.assertTrue(r0 is None)
             r1.Remove()
             r2.Remove()
 
     def ctf_CyclesRule_03(self):
         """Testing: Rule.WatchActivations, Rule.WatchFirings"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -302,14 +322,14 @@ class ctc_CyclesAndLists(ctestcase):
             li = e.RuleList()
             r0 = e.InitialRule()
             for r in li:
-                self.assert_(r0.WatchActivations)
-                self.assert_(r0.WatchFirings)
+                self.assertTrue(r0.WatchActivations)
+                self.assertTrue(r0.WatchFirings)
                 r0 = r0.Next()
-            self.assert_(r0 is None)
+            self.assertTrue(r0 is None)
 
     def ctf_CyclesTemplate_01(self):
         """Testing: InitialTemplate, TemplateList, FindTemplate, Template.Next"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -323,25 +343,25 @@ class ctc_CyclesAndLists(ctestcase):
 
     def ctf_CyclesTemplate_02(self):
         """Testing: Template.Deletable, Template.Module, Template.Watch"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
             t1 = e.BuildTemplate("tf1", "(slot s1)")
             t2 = e.BuildTemplate("tf2", "(slot s2)")
-            self.assert_(t1.Deletable)
-            self.assert_(t2.Deletable)
+            self.assertTrue(t1.Deletable)
+            self.assertTrue(t2.Deletable)
             li = e.TemplateList()
             t0 = e.InitialTemplate()
             for t in li:
                 self.assertEqual(t0.Name, e.FindTemplate(t).Name)
                 self.assertEqual(t0.Module, "MAIN")
-                self.assert_(t0.Watch)
+                self.assertTrue(t0.Watch)
                 t0 = t0.Next()
 
     def ctf_CyclesMessageHandler_01(self):
         """Testing: MessageHandlerList"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -358,11 +378,11 @@ class ctc_CyclesAndLists(ctestcase):
                 w = str(s[1])
                 if w in ws:
                     ws.remove(w)
-            self.assert_(not ws)
+            self.assertTrue(not ws)
 
     def ctf_CyclesMethod_01(self):
         """Testing: BuildGeneric, MethodList, Generic.MethodList, Generic.AddMethod"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -380,11 +400,12 @@ class ctc_CyclesAndLists(ctestcase):
                 elif li[i][1] == 2:
                     self.assertEqual(
                         e.Call("g", clips.String("spam")), "spam" * 2)
-                else: self.assert_(False)
+                else: self.assertTrue(False)
+
 
     def ctf_CyclesMethod_02(self):
         """Testing: Generic.InitialMethod, Generic.NextMethod, Generic.MethodPPForm"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -400,7 +421,7 @@ class ctc_CyclesAndLists(ctestcase):
 
     def ctf_CyclesDeffacts_01(self):
         """Testing: InitialDeffacts, DeffactsList, Deffacts.Next, Deffacts.Name"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -411,12 +432,12 @@ class ctc_CyclesAndLists(ctestcase):
             for d in li:
                 self.assertEqual(d.replace("MAIN::", ""), df0.Name)
                 df0 = df0.Next()
-            self.assert_(df0 is None)
+            self.assertTrue(df0 is None)
 
     def ctf_CyclesDeffacts_02(self):
         """Testing: FindDeffacts, Deffacts.PPForm, Deffacts.Deletable, {...}"""
         """         Deffacts.Module"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -427,15 +448,15 @@ class ctc_CyclesAndLists(ctestcase):
             for d in li:
                 if d.replace("MAIN::", "") != "initial-fact":
                     self.assertEqual(e.FindDeffacts(d).PPForm(), df0.PPForm())
-                self.assert_(df0.Deletable)
+                self.assertTrue(df0.Deletable)
                 self.assertEqual(df0.Module, "MAIN")
                 df0 = df0.Next()
-            self.assert_(df0 is None)
+            self.assertTrue(df0 is None)
 
     def ctf_CyclesDefinstances_01(self):
         """Testing: InitialDefinstances, DefinstancesList, Definstances.Next, {...}"""
         """         Definstances.PPForm, BuildDefinstances"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -447,13 +468,13 @@ class ctc_CyclesAndLists(ctestcase):
             for d in li:
                 if d.replace("MAIN::", "") != "initial-object":
                     self.assertEqual(e.FindDefinstances(d).PPForm(), di0.PPForm())
-                self.assert_(di0.Deletable)
+                self.assertTrue(di0.Deletable)
                 di0 = di0.Next()
-            self.assert_(di0 is None)
+            self.assertTrue(di0 is None)
 
     def ctf_CyclesDefinstances_02(self):
         """Testing: Definstances.Name, Definstances.Module, Definstances.Deletable"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -465,13 +486,13 @@ class ctc_CyclesAndLists(ctestcase):
             for d in li:
                 self.assertEqual(d.replace("MAIN::", ""), di0.Name)
                 self.assertEqual(e.FindDefinstances(d).Module, di0.Module)
-                self.assert_(di0.Deletable)
+                self.assertTrue(di0.Deletable)
                 di0 = di0.Next()
-            self.assert_(di0 is None)
+            self.assertTrue(di0 is None)
 
     def ctf_CyclesGeneric_01(self):
         """Testing: BuildGeneric, Generic.Name, Generic.PPForm, Generic.Watch"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -482,14 +503,14 @@ class ctc_CyclesAndLists(ctestcase):
             for g in li:
                 self.assertEqual(g.replace("MAIN::", ""), g0.Name)
                 self.assertEqual(e.FindGeneric(g).PPForm(), g0.PPForm())
-                self.assert_(g0.Watch)
+                self.assertTrue(g0.Watch)
                 g0 = g0.Next()
-            self.assert_(g0 is None)
+            self.assertTrue(g0 is None)
 
     def ctf_CyclesGeneric_02(self):
         """Testing: InitialGeneric, GenericList, FindGeneric, {...}"""
         """         Generic.Deletable, Generic.Module"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -498,23 +519,23 @@ class ctc_CyclesAndLists(ctestcase):
             li = e.GenericList()
             g0 = e.InitialGeneric()
             for g in li:
-                self.assert_(g0.Deletable)
+                self.assertTrue(g0.Deletable)
                 self.assertEqual(e.FindGeneric(g).Module, g0.Module)
                 g0 = g0.Next()
-            self.assert_(g0 is None)
+            self.assertTrue(g0 is None)
 
     def ctf_CyclesGlobal_01(self):
         """Testing: BuildGlobal, Global.Name, Global.PPForm, {...}"""
         """         GlobalsChanged, Global.ValueForm"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
             e.GlobalsChanged()
-            self.assert_(not e.GlobalsChanged())
+            self.assertTrue(not e.GlobalsChanged())
             g1 = e.BuildGlobal("g1", clips.Integer(42))
             g2 = e.BuildGlobal("g2", clips.Symbol("FORTY-TWO"))
-            self.assert_(e.GlobalsChanged())
+            self.assertTrue(e.GlobalsChanged())
             li = e.GlobalList()
             g0 = e.InitialGlobal()
             for g in li:
@@ -522,12 +543,12 @@ class ctc_CyclesAndLists(ctestcase):
                 self.assertEqual(e.FindGlobal(g).PPForm(), g0.PPForm())
                 self.assertEqual(e.FindGlobal(g).ValueForm(), g0.ValueForm())
                 g0 = g0.Next()
-            self.assert_(g0 is None)
+            self.assertTrue(g0 is None)
 
     def ctf_CyclesGlobal_02(self):
         """Testing: InitialGlobal, GlobalList, FindGlobal, Global.Watch, {...}"""
         """         Global.Deletable, Global.Next, Global.Module, Global.Value"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -538,14 +559,14 @@ class ctc_CyclesAndLists(ctestcase):
             for g in li:
                 self.assertEqual(e.FindGlobal(g).Value, g0.Value)
                 self.assertEqual(e.FindGlobal(g).Module, g0.Module)
-                self.assert_(g0.Watch)
-                self.assert_(g0.Deletable)
+                self.assertTrue(g0.Watch)
+                self.assertTrue(g0.Deletable)
                 g0 = g0.Next()
-            self.assert_(g0 is None)
+            self.assertTrue(g0 is None)
 
     def ctf_CyclesFunction_01(self):
         """Testing: InitialFunction, FunctionList, Function.Name, Function.Next"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -557,12 +578,12 @@ class ctc_CyclesAndLists(ctestcase):
                 self.assertEqual(e.Eval("(%s 21 21)" % f.replace("MAIN::", "")), 42)
                 self.assertEqual(e.Eval("(%s 21 21)" % f0.Name), 42)
                 f0 = f0.Next()
-            self.assert_(f0 is None)
+            self.assertTrue(f0 is None)
 
     def ctf_CyclesFunction_02(self):
         """Testing: FindFunction, Function.PPForm, Function.Watch, {...}"""
         """         Function.Deletable, Function.Module"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -574,14 +595,14 @@ class ctc_CyclesAndLists(ctestcase):
                 self.assertEqual(e.FindFunction(f).Name, f0.Name)
                 self.assertEqual(e.FindFunction(f).Module, f0.Module)
                 self.assertEqual(e.FindFunction(f).PPForm(), f0.PPForm())
-                self.assert_(f0.Watch)
-                self.assert_(f0.Deletable)
+                self.assertTrue(f0.Watch)
+                self.assertTrue(f0.Deletable)
                 f0 = f0.Next()
-            self.assert_(f0 is None)
+            self.assertTrue(f0 is None)
 
     def ctf_CyclesModule_01(self):
         """Testing: InitialModule, BuildModule, FindModule, Module.Name"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -593,7 +614,7 @@ class ctc_CyclesAndLists(ctestcase):
 
     def ctf_CyclesModule_02(self):
         """Testing: ModuleList, Module.PPForm, Module.Next"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -606,7 +627,7 @@ class ctc_CyclesAndLists(ctestcase):
                 if m != "MAIN":
                     self.assertEqual(e.FindModule(m).PPForm(), M0.PPForm())
                 M0 = M0.Next()
-            self.assert_(M0 is None)
+            self.assertTrue(M0 is None)
 
 
 

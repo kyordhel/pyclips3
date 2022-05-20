@@ -36,7 +36,7 @@ class ctc_Function(ctestcase):
 
     def ctf_Function_01(self):
         """Testing: BuildFunction, Function.Name, Function.Module"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -49,7 +49,7 @@ class ctc_Function(ctestcase):
         def tfunc(a, b):
             return a + b
         clips.RegisterPythonFunction(tfunc)
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -60,16 +60,16 @@ class ctc_Function(ctestcase):
     def ctf_Function_03(self):
         """Testing: FindFunction, Function.Deletable, Function.Watch, {...}"""
         """         Function.PPForm"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
             f1 = e.BuildFunction("tf", "?a ?b", "(str-cat ?a ?b)")
             f2 = e.BuildFunction("tfd", "?a ?b", "(tf ?a ?b)")
-            self.assert_(f2.Deletable)
-            self.assert_(not f1.Deletable)
-            self.assert_(f1.Watch)
-            self.assert_(f2.Watch)
+            self.assertTrue(f2.Deletable)
+            self.assertTrue(not f1.Deletable)
+            self.assertTrue(f1.Watch)
+            self.assertTrue(f2.Watch)
             self.assertEqual(e.FindFunction("tfd").PPForm(), f2.PPForm())
 
 
@@ -81,13 +81,13 @@ class ctc_Generic(ctestcase):
         def mulstr(s, n):
             return clips.String(s * n)
         clips.RegisterPythonFunction(mulstr)
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
             g1 = e.BuildGeneric("g1")
             self.assertEqual(g1.Name, "g1")
-            self.assert_(g1.Watch)
+            self.assertTrue(g1.Watch)
             g1.AddMethod(
                 [('?p1', clips.ClipsStringType), ('?p2', clips.ClipsStringType)],
                 '(str-cat ?p1 ?p2)')
@@ -103,7 +103,7 @@ class ctc_Generic(ctestcase):
 
     def ctf_Generic_02(self):
         """Testing: Generic.MethodList, Generic.RemoveMethod, Generic.Module"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
@@ -118,35 +118,35 @@ class ctc_Generic(ctestcase):
 
     def ctf_Generic_03(self):
         """Testing: FindGeneric, Generic.Deletable, Generic.PPForm"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
             g1 = e.BuildGeneric("g1")
             g1.AddMethod("(?p1 NUMBER)(?p2 NUMBER)", "(+ ?p1 ?p2)")
-            self.assert_(g1.Deletable)
+            self.assertTrue(g1.Deletable)
             f1 = e.BuildFunction("f1", "?a ?b", "(g1 ?a ?b)")
-            self.assert_(not g1.Deletable)
+            self.assertTrue(not g1.Deletable)
             self.assertEqual(e.FindGeneric("g1").PPForm(), g1.PPForm())
 
     def ctf_Generic_04(self):
         """Testing: Generic.MethodWatched, Generic.WatchMethod, {...}"""
         """         Generic.UnwatchMethod, Generic.MethodDeletable"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
             g1 = e.BuildGeneric("g1")
             g1.AddMethod("(?p1 NUMBER)(?p2 NUMBER)", "(+ ?p1 ?p2)")
-            self.assert_(g1.MethodDeletable(1))
+            self.assertTrue(g1.MethodDeletable(1))
             g1.UnwatchMethod(1)
-            self.assert_(not g1.MethodWatched(1))
+            self.assertTrue(not g1.MethodWatched(1))
             g1.WatchMethod(1)
-            self.assert_(g1.MethodWatched(1))
+            self.assertTrue(g1.MethodWatched(1))
 
     def ctf_Generic_05(self):
         """Testing: Generic.MethodRestrictions, Generic.MethodDescription"""
-        for x in self.envdict.keys():
+        for x in self.envdict:
             e = self.envdict[x]
             e.Clear()
             e.Reset()
