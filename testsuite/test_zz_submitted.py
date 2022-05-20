@@ -25,15 +25,10 @@ class ctc_Submitted(ctestcase):
                 """(object (is-a C) (a1 ?a1&HELLO))""",
                 """(assert (success))"""
                 )
-            print(f"r: {r}")
             e.Run()
             f = e.InitialFact()
-            print(f"f: {f}")
-            print(f"f.Relation: {f.Relation}")
             while f.Next():
                 f = f.Next()
-                print(f"f: {f}")
-                print(f"f.Relation: {f.Relation}")
             self.assertEqual(f.Relation, clips.Symbol("success"))
 
 

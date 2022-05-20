@@ -399,7 +399,7 @@ class ctc_CyclesAndLists(ctestcase):
                 if li[i][1] == 1: self.assertEqual(e.Call("g", 21), 42)
                 elif li[i][1] == 2:
                     self.assertEqual(
-                        e.Call("g", clips.String("spam")), "spam" * 2)
+                        e.Call("g", clips.String('"spam"')), "spam" * 2)
                 else: self.assertTrue(False)
 
 
