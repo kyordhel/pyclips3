@@ -2,9 +2,5 @@
 *
 # But these files
 !.gitignore
-!Makefile
 # And these filetypes
-!*.c
-!*.h
-# Even if they are in subdirectories
-!*/
+!*.py
