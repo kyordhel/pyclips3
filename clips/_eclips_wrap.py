@@ -33,6 +33,9 @@ import types as _types
 # the low-level module
 import clips.mclips3 as _c
 
+# Import module helpers
+from clips._helpers import *
+
 
 # ========================================================================== #
 # globals
@@ -356,13 +359,10 @@ class Environment(object):
             @_forces_method(str, str, None)
             def BuildSubclass(self, name, text="", comment=None):
                 """build a subclass of this Class with specified name and body"""
-                if comment:
-                    cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-                else:
-                    cmtstr = ""
+                cmtstr = escapeComment(comment)
                 clname = _c.env_getDefclassName(self.__env, self.__defclass)
-                cltext = "(is-a %s)" % clname + text
-                construct = "(defclass %s %s %s)" % (name, cmtstr, cltext)
+                cltext = f"(is-a {clname}) {text}"
+                construct = f"(defclass {name} {cmtstr} {cltext})"
                 _c.env_build(self.__env, construct)
                 return self.__envobject.Class(_c.env_findDefclass(self.__env, name))
             @_accepts_method(str, str)
@@ -411,10 +411,7 @@ class Environment(object):
             @_forces_method(str, str, str, None, None)
             def AddMessageHandler(self, name, args, text, htype=PRIMARY, comment=None):
                 """build a MessageHandler for this class with arguments and body"""
-                if comment:
-                    cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-                else:
-                    cmtstr = ""
+                cmtstr = escapeComment(comment)
                 htype = htype.lower()
                 if not htype in (AROUND, BEFORE, PRIMARY, AFTER):
                     raise ValueError("htype must be AROUND, BEFORE, PRIMARY or AFTER")
@@ -425,8 +422,7 @@ class Environment(object):
                 else:
                     sargs = str(args)
                 hclass = _c.env_getDefclassName(self.__env, self.__defclass)
-                construct = "(defmessage-handler %s %s %s %s (%s) %s)" % (
-                    hclass, name, htype, cmtstr, sargs, text)
+                construct = f"(defmessage-handler {hclass} {name} {htype} {cmtstr} ({sargs}) {text})"
                 _c.env_build(self.__env, construct)
                 return _c.env_findDefmessageHandler(self.__env, self.__defclass, name, htype)
             @_accepts_method(str, None)
@@ -470,16 +466,14 @@ class Environment(object):
                 """return list of MessageHandler constructs of this Class"""
                 o = _c.env_getDefmessageHandlerList(self.__env, self.__defclass, False)
                 li, rv = Multifield(self.__envobject._cl2py(o)), []
-                l = len(li) / 3
-                for x in range(0, l):
+                for x in range( len(li) // 3 ):
                     rv.append(Multifield([li[x * 3], li[x * 3 + 1], li[x * 3 + 2]]))
                 return Multifield(rv)
             def AllMessageHandlerList(self):
                 """return list of MessageHandlers of this Class and superclasses"""
                 o = _c.env_getDefmessageHandlerList(self.__env, self.__defclass, True)
                 li, rv = Multifield(self.__envobject._cl2py(o)), []
-                l = len(li) / 3
-                for x in range(0, l):
+                for x in range( len(li) // 3 ):
                     rv.append(Multifield([li[x * 3], li[x * 3 + 1], li[x * 3 + 2]]))
                 return Multifield(rv)
             def PrintMessageHandlers(self):
@@ -894,8 +888,7 @@ class Environment(object):
                 """return the list of Method indices for this Generic"""
                 o = _c.env_getDefmethodList(self.__env, self.__defgeneric)
                 li, mli = Multifield(self.__envobject._cl2py(o)), Multifield([])
-                l = len(li) / 2
-                for x in range(0, l):
+                for x in range( len(li) // 2 ):
                     mli.append(li[2 * x + 1])
                 return mli
             def MethodDescription(self, midx):
@@ -927,10 +920,7 @@ class Environment(object):
             @_accepts_method(None, None, (int, int), None)
             def AddMethod(self, restrictions, actions, midx=None, comment=None):
                 """Add a method to this Generic, given restrictions and actions"""
-                if comment:
-                    cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-                else:
-                    cmtstr = ""
+                cmtstr = escapeComment(comment)
                 if midx:
                     indstr = str(midx)
                 else:
@@ -977,8 +967,7 @@ class Environment(object):
                     rstr = restrictions
                 else:
                     raise TypeError("tuple or string expected as restriction")
-                _c.env_build(self.__env, "(defmethod %s %s %s (%s) %s)" % (
-                    self.Name, indstr, cmtstr, rstr, actions))
+                _c.env_build(self.__env, f"(defmethod {self.Name} {indstr} {cmtstr} ({rstr}) {actions})")
             def RemoveMethod(self, midx):
                 """remove specified Method"""
                 _c.env_undefmethod(self.__env, midx, self.__defgeneric)
@@ -1240,14 +1229,11 @@ class Environment(object):
             @_forces_method(str, str, None)
             def BuildTemplate(self, name, text, comment=None):
                 """build a Template object with specified name and body"""
-                if comment:
-                    cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-                else:
-                    cmtstr = ""
+                cmtstr = escapeComment(comment)
                 mname = self.Name
-                construct = "(deftemplate %s::%s %s %s)" % (mname, name, cmtstr, text)
+                construct = f"(deftemplate {mname}::{name} {cmtstr} {text})"
                 _c.env_build(self.__env, construct)
-                return self.__envobject.Template(_c.env_findDeftemplate(self.__env, "%s::%s" % (mname, name)))
+                return self.__envobject.Template(_c.env_findDeftemplate(self.__env,  f"{mname}::{name}" ))
             def TemplateList(self):
                 """return list of Template names"""
                 o = _c.env_getDeftemplateList(self.__env, self.__defmodule)
@@ -1271,14 +1257,11 @@ class Environment(object):
             @_forces_method(str, str, None)
             def BuildDeffacts(self, name, text, comment=None):
                 """build a Deffacts object with specified name and body"""
-                if comment:
-                    cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-                else:
-                    cmtstr = ""
+                cmtstr = escapeComment(comment)
                 mname = self.Name
-                construct = "(deffacts %s::%s %s %s)" % (mname, name, cmtstr, text)
+                construct = f"(deffacts {mname}::{name} {cmtstr} {text})"
                 _c.env_build(self.__env, construct)
-                return self.__envobject.Deffacts(_c.env_findDeffacts(self.__env, "%s::%s" % (mname, name)))
+                return self.__envobject.Deffacts(_c.env_findDeffacts(self.__env,  f"{mname}::{name}" ))
             def DeffactsList(self):
                 """return a list of Deffacts names in this Module"""
                 o = _c.env_getDeffactsList(self.__env, self.__defmodule)
@@ -1294,15 +1277,11 @@ class Environment(object):
             @_forces_method(str, str, str, None)
             def BuildRule(self, name, lhs, rhs, comment=None):
                 """build a Rule object with specified name and LHS/RHS"""
-                if comment:
-                    cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-                else:
-                    cmtstr = ""
+                cmtstr = escapeComment(comment)
                 mname = self.Name
-                construct = "(defrule %s::%s %s %s => %s)" % (
-                    mname, name, cmtstr, lhs, rhs)
+                construct = f"(defrule {mname}::{name} {cmtstr} {lhs} => {rhs})"
                 _c.env_build(self.__env, construct)
-                return self.__envobject.Rule(_c.env_findDefrule(self.__env, "%s::%s" % (mname, name)))
+                return self.__envobject.Rule(_c.env_findDefrule(self.__env,  f"{mname}::{name}" ))
             def RuleList(self):
                 """return a list of Rule names in this Module"""
                 o = _c.env_getDefruleList(self.__env, self.__defmodule)
@@ -1341,9 +1320,9 @@ class Environment(object):
                 mname = self.Name
                 if type(value)  in (str, ClipsStringType):
                     value = '"%s"' % value
-                construct = "(defglobal %s ?*%s* = %s)" % (mname, name, value)
+                construct = f"(defglobal {mname} ?*{name}* = {value})"
                 _c.env_build(self.__env, construct)
-                return self.__envobject.Global(_c.env_findDefglobal(self.__env, "%s::%s" % (mname, name)))
+                return self.__envobject.Global(_c.env_findDefglobal(self.__env,  f"{mname}::{name}" ))
             def GlobalList(self):
                 """return the list of Global variable names"""
                 o = _c.env_getDefglobalList(self.__env, self.__defmodule)
@@ -1366,19 +1345,15 @@ class Environment(object):
             @_forces_method(str, None, str, None)
             def BuildFunction(self, name, args, text, comment=None):
                 """build a Function with specified name, body and arguments"""
-                if comment:
-                    cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-                else:
-                    cmtstr = ""
+                cmtstr = escapeComment(comment)
                 mname = self.Name
                 if type(args) in (tuple, list):
                     args = " ".join(args)
                 elif args is None:
                     args = ""
-                construct = "(deffunction %s::%s %s (%s) %s)" % (
-                    mname, name, cmtstr, args, text)
+                construct = f"(deffunction {mname}::{name} {cmtstr} ({args}) {text})"
                 _c.env_build(self.__env, construct)
-                return self.__envobject.Function(_c.env_findDeffunction(self.__env, "%s::%s" % (mname, name)))
+                return self.__envobject.Function(_c.env_findDeffunction(self.__env,  f"{mname}::{name}" ))
             def FunctionList(self):
                 """return the list of Function names"""
                 o = _c.env_getDeffunctionList(self.__env, self.__defmodule)
@@ -1394,14 +1369,11 @@ class Environment(object):
             @_forces_method(str, None)
             def BuildGeneric(self, name, comment=None):
                 """build a Generic with specified name"""
-                if comment:
-                    cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-                else:
-                    cmtstr = ""
+                cmtstr = escapeComment(comment)
                 mname = self.Name
-                construct = "(defgeneric %s::%s %s)" % (mname, name, cmtstr)
+                construct = f"(defgeneric {mname}::{name} {cmtstr})"
                 _c.env_build(self.__env, construct)
-                return self.__envobject.Generic(_c.env_findDefgeneric(self.__env, "%s::%s" % (mname, name)))
+                return self.__envobject.Generic(_c.env_findDefgeneric(self.__env, f"{mname}::{name}"))
             def GenericList(self):
                 """return the list of Generic names"""
                 o = _c.env_getDefgenericList(self.__env, self.__defmodule)
@@ -1417,14 +1389,11 @@ class Environment(object):
             @_forces_method(str, str, None)
             def BuildClass(self, name, text, comment=None):
                 """build a Class with specified name and body"""
-                if comment:
-                    cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-                else:
-                    cmtstr = ""
+                cmtstr = escapeComment(comment)
                 mname = self.Name
-                construct = "(defclass %s::%s %s %s)" % (mname, name, cmtstr, text)
+                construct = f"(defclass {mname}::{name} {cmtstr} {text})"
                 _c.env_build(self.__env, construct)
-                return self.__envobject.Class(_c.env_findDefclass(self.__env, "%s::%s" % (mname, name)))
+                return self.__envobject.Class(_c.env_findDefclass(self.__env,  f"{mname}::{name}" ))
             def ClassList(self):
                 """return the list of Class names"""
                 o = _c.env_getDefclassList(self.__env, self.__defmodule)
@@ -1441,7 +1410,7 @@ class Environment(object):
             def BuildInstance(self, name, defclass, overrides=""):
                 """build an Instance of given Class overriding specified Slots"""
                 mname = self.Name
-                cmdstr = "(%s::%s of %s %s)" % (mname, name, defclass, overrides)
+                cmdstr = f"({mname}::{name} of {defclass} {overrides})"
                 return self.__envobject.Instance(_c.env_makeInstance(self.__env, cmdstr))
             @_forces_method(str)
             def PrintInstances(self, classname=None):
@@ -1466,13 +1435,9 @@ class Environment(object):
             @_forces_method(str, str, None)
             def BuildDefinstances(self, name, text, comment=None):
                 """build a Definstances with specified name and body"""
-                if comment:
-                    cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-                else:
-                    cmtstr = ""
+                cmtstr = escapeComment(comment)
                 mname = self.Name
-                construct = "(definstances %s::%s %s %s)" % (
-                    mname, name, cmtstr, text)
+                construct = f"(definstances {mname}::{name} {cmtstr} {text})"
                 _c.env_build(self.__env, construct)
                 return self.__envobject.Definstances(_c.env_findDefinstances(self.__env, name))
             def DefinstancesList(self):
@@ -2088,59 +2053,44 @@ class Environment(object):
     @_forces_method(str, str, None)
     def BuildClass(self, name, text, comment=None):
         """build a Class with specified name and body"""
-        if comment:
-            cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-        else:
-            cmtstr = ""
-        construct = "(defclass %s %s %s)" % (name, cmtstr, text)
+        cmtstr = escapeComment(comment)
+        construct = f"(defclass {name} {cmtstr} {text})"
         _c.env_build(self.__env, construct)
         return self.Class(_c.env_findDefclass(self.__env, name))
     @_accepts_method(str, str, None)
     @_forces_method(str, str, None)
     def BuildDeffacts(self, name, text, comment=None):
         """build a Deffacts object with specified name and body"""
-        if comment:
-            cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-        else:
-            cmtstr = ""
-        construct = "(deffacts %s %s %s)" % (name, cmtstr, text)
+        cmtstr = escapeComment(comment)
+        construct = f"(deffacts {name} {cmtstr} {text})"
         _c.env_build(self.__env, construct)
         return self.Deffacts(_c.env_findDeffacts(self.__env, name))
     @_accepts_method(str, str, None)
     @_forces_method(str, str, None)
     def BuildDefinstances(self, name, text, comment=None):
         """build a Definstances with specified name and body"""
-        if comment:
-            cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-        else:
-            cmtstr = ""
-        construct = "(definstances %s %s %s)" % (name, cmtstr, text)
+        cmtstr = escapeComment(comment)
+        construct = f"(definstances {name} {cmtstr} {text})"
         _c.env_build(self.__env, construct)
         return self.Definstances(_c.env_findDefinstances(self.__env, name))
     @_accepts_method(str, None, str, None)
     @_forces_method(str, None, str, None)
     def BuildFunction(self, name, args, text, comment=None):
         """build a Function with specified name, body and arguments"""
-        if comment:
-            cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-        else:
-            cmtstr = ""
+        cmtstr = escapeComment(comment)
         if type(args) in (tuple, list):
             args = " ".join(args)
         elif args is None:
             args = ""
-        construct = "(deffunction %s %s (%s) %s)" % (name, cmtstr, args, text)
+        construct = f"(deffunction {name} {cmtstr} ({args}) {text})"
         _c.env_build(self.__env, construct)
         return self.Function(_c.env_findDeffunction(self.__env, name))
     @_accepts_method(str, None)
     @_forces_method(str, None)
     def BuildGeneric(self, name, comment=None):
         """build a Generic with specified name and body"""
-        if comment:
-            cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-        else:
-            cmtstr = ""
-        construct = "(defgeneric %s %s)" % (name, cmtstr)
+        cmtstr = escapeComment(comment)
+        construct = f"(defgeneric {name} {cmtstr})"
         _c.env_build(self.__env, construct)
         return self.Generic(_c.env_findDefgeneric(self.__env, name))
     @_accepts_method(str, None)
@@ -2148,10 +2098,10 @@ class Environment(object):
     def BuildGlobal(self, name, value=Nil):
         """build a Global variable with specified name and body"""
         if type(value) in (str, ClipsStringType):
-            value = '"%s"' % str(value)
-        construct = "(defglobal ?*%s* = %s)" % (name, value)
+            value = '"{str(value)}"'
+        construct = f"(defglobal ?*{name}* = {value})"
         _c.env_build(self.__env, construct)
-        return self.Global(_c.env_findDefglobal(self.__env, "%s" % name))
+        return self.Global(_c.env_findDefglobal(self.__env,  str(name) ))
     @_accepts_method(str, None, str)
     @_forces_method(str, str, str)
     def BuildInstance(self, name, defclass, overrides=""):
@@ -2162,9 +2112,7 @@ class Environment(object):
     @_forces_method(str, str, None, str, None, None)
     def BuildMessageHandler(self, name, hclass, args, text, htype=PRIMARY, comment=None):
         """build a MessageHandler for specified class with arguments and body"""
-        if comment:
-            cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-        else: cmtstr = ""
+        cmtstr = escapeComment(comment)
         htype = htype.lower()
         if not htype in (AROUND, BEFORE, PRIMARY, AFTER):
             raise ValueError("htype must be in AROUND, BEFORE, PRIMARY, AFTER")
@@ -2174,8 +2122,7 @@ class Environment(object):
             sargs = ""
         else:
             sargs = str(args)
-        construct = "(defmessage-handler %s %s %s %s (%s) %s)" % (
-            hclass, name, htype, cmtstr, sargs, text)
+        construct = f"(defmessage-handler {hclass} {name} {htype} {cmtstr} ({sargs}) {text})"
         _c.env_build(self.__env, construct)
         defclass = _c.env_findDefclass(self.__env, hclass)
         return _c.env_findDefmessageHandler(self.__env, defclass, name, htype)
@@ -2183,33 +2130,24 @@ class Environment(object):
     @_forces_method(str, str, None)
     def BuildModule(self, name, text="", comment=None):
         """build a Module with specified name and body"""
-        if comment:
-            cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-        else:
-            cmtstr = ""
-        construct = "(defmodule %s %s %s)" % (name, cmtstr, text)
+        cmtstr = escapeComment(comment)
+        construct = f"(defmodule {name} {cmtstr} {text})"
         _c.env_build(self.__env, construct)
         return self.Module(_c.env_findDefmodule(self.__env, name))
     @_accepts_method(str, str, str, None)
     @_forces_method(str, str, str, None)
     def BuildRule(self, name, lhs, rhs, comment=None):
         """build a Rule object with specified name and body"""
-        if comment:
-            cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-        else:
-            cmtstr = ""
-        construct = "(defrule %s %s %s => %s)" % (name, cmtstr, lhs, rhs)
+        cmtstr = escapeComment(comment)
+        construct = f"(defrule {name} {cmtstr} {lhs} => {rhs})"
         _c.env_build(self.__env, construct)
         return self.Rule(_c.env_findDefrule(self.__env, name))
     @_accepts_method(str, str, None)
     @_forces_method(str, str, None)
     def BuildTemplate(self, name, text, comment=None):
         """build a Template object with specified name and body"""
-        if comment:
-            cmtstr = '"%s"' % str(comment).replace('"', '\\"')
-        else:
-            cmtstr = ""
-        construct = "(deftemplate %s %s %s)" % (name, cmtstr, text)
+        cmtstr = escapeComment(comment)
+        construct = f"(deftemplate {name} {cmtstr} {text})"
         _c.env_build(self.__env, construct)
         return self.Template(_c.env_findDeftemplate(self.__env, name))
     @_accepts_method(str, None)
@@ -2234,7 +2172,7 @@ class Environment(object):
                         li.append(_py2clsyntax(x))
                     elif t1 == int or isinstance(x, int):
                         li.append(Integer(int(x)).clsyntax())
-                    elif t1 == loat or isinstance(x, float):
+                    elif t1 == float or isinstance(x, float):
                         li.append(Float(x).clsyntax())
                     elif t1 == str or isinstance(x, str):
                         li.append(String(x).clsyntax())
@@ -2478,16 +2416,14 @@ class Environment(object):
         """return list of MessageHandler constructs"""
         o = _c.env_getDefmessageHandlerList(self.__env)
         li, rv = Multifield(self._cl2py(o)), []
-        l = len(li) / 3
-        for x in range(0, l):
+        for x in range( len(li) // 3 ):
             rv.append(Multifield([li[x * 3], li[x * 3 + 1], li[x * 3 + 2]]))
         return Multifield(rv)
     def MethodList(self):
         """return the list of all Methods"""
         o = self._cl2py(_c.env_getDefmethodList(self.__env))
         li = Multifield([])
-        l = len(o) / 2
-        for x in range(l):
+        for x in range( len(o) // 2 ):
             li.append(Multifield([o[2 * x], o[2 * x + 1]]))
         return li
     def ModuleList(self):
