@@ -285,8 +285,10 @@ def _forces_method(*types):
 # 1) numeric types
 class Integer(int):
     """extend an int for use with CLIPS"""
+    def __str__(self):
+        return f"{int.__repr__(self)}"
     def __repr__(self):
-        return "<Integer %s>" % int.__repr__(self)
+        return f"<Integer {int.__repr__(self)}>"
     def __add__(self, o):
         return Integer(int(self) + int(o))
     def __sub__(self, o):
@@ -328,6 +330,8 @@ ClipsIntegerType = type(Integer(0))
 
 class Float(float):
     """extend a float for use with CLIPS"""
+    def __str__(self):
+        return f"{float.__repr__(self)}"
     def __repr__(self):
         return "<Float %s>" % float.__repr__(self)
     def __add__(self, o):
@@ -360,6 +364,8 @@ ClipsFloatType = type(Float(0.0))
 # 2) string types
 class String(str):
     """extend a str for use with CLIPS"""
+    def __str__(self):
+        return super().__str__()
     def __repr__(self):
         return "<String %s>" % str.__repr__(self)
     def __add__(self, o):
@@ -377,10 +383,12 @@ ClipsStringType = type(String(""))
 
 class Symbol(str):
     """extend a str for use with CLIPS as symbol"""
+    def __str__(self):
+        return super().__str__()
     def __repr__(self):
         return "<Symbol %s>" % str.__repr__(self)
-    def __nonzero__(self):
-        return bool(self not in ('FALSE', 'nil', ''))
+    def __bool__(self):
+        return bool(self not in ('FALSE', 'nil', '', '0'))
     def __add__(self, o):
         return Symbol(str(self) + str(o))
     def clrepr(self):
@@ -396,6 +404,8 @@ ClipsSymbolType = type(Symbol(""))
 
 class InstanceName(str):
     """extend a str for use with CLIPS as instance name"""
+    def __str__(self):
+        return super().__str__()
     def __repr__(self):
         return "<InstanceName %s>" % str.__repr__(self)
     def __add__(self, o):
@@ -428,7 +438,7 @@ class NilObject(Symbol):
         return o is self or o == Symbol("nil")
     def __ne__(self, o):
         return o is not self and o != Symbol("nil")
-    def __nonzero__(self):
+    def __bool__(self):
         return False
     def clrepr(self):
         """represent the nil symbol for CLIPS"""
