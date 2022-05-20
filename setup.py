@@ -304,6 +304,9 @@ import types as _types
 # the low-level module
 import clips.mclips3 as _c
 
+# Import module helpers
+from clips._helpers import *
+
 
 # ========================================================================== #
 # globals
