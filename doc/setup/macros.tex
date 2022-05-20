@@ -1,0 +1,195 @@
+% CHKTEX-FILE 1
+% CHKTEX-FILE 21
+
+% some definitions used troughout the documentation
+% $Id: defs.tex 99 2004-07-13 21:01:38Z Franz $
+
+\newcommand{\note}[1]{\paragraph*{Note:} #1}
+\newcommand{\notice}[1]{\paragraph*{Notice:} #1}
+\newcommand{\seetitle}[3][]{%
+	\textit{#2}\\[0pt]#3
+}
+
+\newcommand{\module}[1]{\detokenize{#1}}
+\newcommand{\program}[1]{\emph{\detokenize{#1}}}
+\newcommand{\function}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\keyword}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\class}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\file}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\var}[1]{\textit{\detokenize{#1}}}
+\newcommand{\exception}[1]{\textit{\detokenize{#1}}}
+\newcommand{\constant}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\verbatiminput}[1]{\VerbatimInput{#1}}
+
+\newenvironment{seealso}{%
+	\subsubsection*{See Also:}
+	\list{}{%
+		\itemindent=-2em
+		\leftmargin=4em
+		\rightmargin=2em
+		\topsep=0pt
+		\partopsep=0pt
+	}\item\relax%
+}{%
+	\endlist%
+}
+
+\newcommand{\lineii}[2]{}
+
+\newenvironment{tableii}[4]{%
+	\renewcommand{\lineii}[2]{%
+		\texttt{\detokenize{##1}} & ##2 \\%
+	}
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{#1}
+	\toprule%
+	\multicolumn{1}{c|}{#3} &
+	\multicolumn{1}{c}{#4} \\
+	\midrule%
+}{%
+	\bottomrule%
+	\end{tabular}%
+	\end{table}%
+}
+
+\newcommand{\lineiii}[3]{}
+\newenvironment{tableiii}[5]{%
+	\renewcommand{\lineiii}[3]{%
+		\texttt{\detokenize{##1}} & ##2 & ##3 \\%
+	}
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{#1}
+	\toprule%
+	\multicolumn{1}{c|}{#3} &
+	\multicolumn{1}{c|}{#4} &
+	\multicolumn{1}{c}{#5} \\
+	\midrule%
+}{%
+	\bottomrule%
+	\end{tabular}%
+	\end{table}%
+}
+
+\newcommand{\optional}[1]{%
+	{\normalfont \([\)}% CHKTEX 9
+	#1%
+	{\normalfont \(]\)}% CHKTEX 9
+}
+
+\newenvironment{funcdesc}[2]{%
+	\noindent\textbf{#1}\(\big(\)%
+	\textit{#2}%
+	\(\big)\)%
+	% \\[0pt]%
+	\list{}{%
+		\itemindent=-0cm
+		\leftmargin=2em
+		\rightmargin=2em
+		\topsep=0pt
+		\partopsep=0pt
+	}\item\relax%
+}{%
+	\endlist%
+}
+
+\newenvironment{classdesc*}[1]{%
+	\subsection*{class \texttt{#1}}%
+	\list{}{%
+		\itemindent=-0cm
+		\leftmargin=2em
+		\rightmargin=2em
+		\topsep=0pt
+		\partopsep=0pt
+	}\item\relax%
+}{%
+	\endlist%
+}
+
+\newenvironment{memberdesc}[2][]{%
+	\noindent\textbf{#2}
+	\list{}{%
+		\itemindent=-0cm
+		\leftmargin=2em
+		\rightmargin=2em
+		\topsep=0pt
+		\partopsep=0pt
+	}\item\relax%
+}{%
+	\endlist%
+}
+
+\newenvironment{methoddesc}[2]{%
+	\begin{funcdesc}{#1}{#2}%
+}{%
+	\end{funcdesc}%
+}
+
+\newenvironment{excdesc}[2]{%
+	\begin{funcdesc}{exception #1}{#2}%
+}{%
+	\end{funcdesc}%
+}
+
+\newcommand{\UNIX}{UNIX}
+% all references to the PyCLIPS module should use this macro
+\newcommand{\pyclips}{\module{PyCLIPS}}
+
+
+% references to the APG, BPG and Tutorial should use these macros
+\newcommand{\clipsapg}{%
+	\emph{Clips Reference Guide Vol.~II:\@
+	Advanced Programming Guide}%
+}
+
+
+\newcommand{\clipsbpg}{%
+	\emph{Clips Reference Guide Vol.~I:\@
+	Basic Programming Guide}%
+}
+
+\newcommand{\sclipsapg}{%
+	\seetitle{Clips Reference Guide Vol.~II:\@
+	Advanced Programming Guide}{contains detailed information
+	about CLIPS API and internal structures}%
+}
+
+\newcommand{\sclipsbpg}{%
+	\seetitle{Clips Reference Guide Vol. I:\@
+	Basic Programming Guide}{the main reference for the CLIPS language}%
+}
+
+\newcommand{\clipstut}{\emph{Clips User's Guide}}
+
+\newcommand{\sclipstut}{
+	\seetitle{Clips User's Guide}{the official tutorial for the CLIPS language}%
+}
+
+\makeatletter
+\newcommand\abstractname{Abstract}
+\if@titlepage
+  \newenvironment{abstract}{%
+      \titlepage
+      \null\vfil
+      \@beginparpenalty\@lowpenalty
+      \begin{center}%
+        \bfseries \abstractname
+        \@endparpenalty\@M
+      \end{center}}%
+     {\par\vfil\null\endtitlepage}
+\else
+  \newenvironment{abstract}{%
+      \if@twocolumn
+        \section*{\abstractname}%
+      \else
+        \small
+        \begin{center}%
+          {\bfseries \abstractname\vspace{-.5em}\vspace{\z@}}%
+        \end{center}%
+        \quotation
+      \fi}
+      {\if@twocolumn\else\endquotation\fi}
+\fi
+\makeatother

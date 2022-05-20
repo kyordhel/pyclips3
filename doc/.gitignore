@@ -1,0 +1,11 @@
+# Ignore everything
+*
+# But these files
+!.gitignore
+!Makefile
+!license.txt
+!zebra.clp
+# And these filetypes
+!*.tex
+# Even if they are in subdirectories
+!*/
