@@ -4,6 +4,8 @@
 !.gitignore
 !FAQ
 !README
+!README.md
+!LICENSE
 !requirements.txt
 
 !CLIPSSrc.zip
@@ -18,9 +20,9 @@
 !setup.py
 
 # And these subdirectories
-!doc/
-!clips/
-!clipssrc/
-!optpatch/
-!testsuite/
+!doc/*
+!clips/*
+!clipssrc/*
+!optpatch/*
+!testsuite/*
 
